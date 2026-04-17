@@ -1,0 +1,159 @@
+[
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-3accd5f5.json",
+    "observation_id": "654eb0b33caa5abf",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "style_frame_handoff",
+    "type": "image"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-3accd5f5.json",
+    "observation_id": "0af49ce4ae4aba66",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "style_frame_chaos",
+    "type": "image"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-3accd5f5.json",
+    "observation_id": "4dec0b482cfa6bd2",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "style_frame_dashboard",
+    "type": "image"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "01316a606b06bb69",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "char_ref_trio",
+    "type": "image"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "42b7a8825fcbbdda",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "ui_platform_hub",
+    "type": "image"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "4cc2640340ecc22e",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "seq2_platform_intro",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "d4d9e49cf2d98189",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "seq4_dashboard_reveal",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "5b342cb0fc051148",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "seq1_problem_triptych",
+    "type": "video"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "604e007256610c4b",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "ui_dashboard",
+    "type": "image"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "de2269cecc1da17a",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_explainer",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "ad11d3481215775f",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "seq3_automation",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "12969895154b6358",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/workspace/assets/workflow_explainer_v1.mp4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "7f43951849b6cdc8",
+    "prompt": "When approvals scatter across emails, tasks stall waiting for handoffs, and no one can see what's actually happening — work grinds to a halt.\n\nMeet the smarter way to work. One place where every request lands, gets prioritized, and finds the right team — automatically.\n\nTasks route themselves. Teams stay informed. Every step tracked in real time, with no one chasing updates.\n\nAnd managers get the clear picture they need — to move faster, together.",
+    "model": "eleven_v3",
+    "name": "voiceover_main",
+    "type": "audio",
+    "voice_id": "EXAVITQu4vr4xnSDxMaL"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "82bf59b8fae1fc86",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "env_problem_office",
+    "type": "image"
+  },
+  {
+    "tool": "execute_edit_video",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "bd2eed4b9538744b",
+    "name": "workflow_explainer_v1",
+    "type": "assembly",
+    "prompt": "",
+    "assembly_urls": [
+      "/workspace/assets/seq1_problem_triptych_20260416T100654_1e46e721.mp4",
+      "/workspace/assets/seq2_platform_intro_20260416T100628_98a380f7.mp4",
+      "/workspace/assets/seq3_automation_20260416T100612_c1b38b84.mp4",
+      "/workspace/assets/seq4_dashboard_reveal_20260416T100617_09d35dd6.mp4",
+      "/workspace/assets/voiceover_main_20260416T100307_04daa080.mp3",
+      "/workspace/assets/bgm_explainer_20260416T100806_1c819d2b.mp3"
+    ],
+    "clip_count": 6
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-2-0959033b.json",
+    "observation_id": "fac4a14dcf7ca0b5",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "style_ref_anchor",
+    "type": "image"
+  }
+]
