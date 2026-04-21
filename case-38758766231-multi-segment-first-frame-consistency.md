@@ -44,7 +44,9 @@ seg1 是正脸开场，但手部在画面中可见。没有美甲参考图，See
 
 generation-skill 接手后将视频拆成三段独立生成。在编排 seg1（正脸开场段）时，agent 认为「此段重点在人物，不需要美甲参考」，只保留了人物图，将 `a_b592vRD` 从 seg1 的 image_list 中删除。seg2/seg3 因为内容明确涉及美甲才保留了参考图。
 
-**本质**：generation-skill 在多段拆分时，对「哪些段需要哪些参考图」做了主观判断，而不是将 creative-skill 确定的 image_list 原样带下去。正脸段因手部不是主体而被认为无需美甲参考，但 Seedance 生成时手部仍然可见，美甲外观因此完全失控。
+**本质**：creative→generation 之间没有结构化交接机制。generation-skill 收到的只是完整对话历史（38 条消息），creative 阶段的 image_list 决策只存在于某条消息的 `partial_json` 字符串里，不是可读取的结构化数据。generation-skill 没有工具去读「creative 阶段传了哪些图」，只能按段落内容自行推理——seg1 的计划描述是「自拍正脸，兴奋开口」，没有美甲相关信号，agent 就只传了人物图。
+
+正脸段因手部不是主体而被认为无需美甲参考，但 Seedance 生成时手部仍然可见，美甲外观因此完全失控。
 
 ### 2. seg2/seg3 有参考图但锚定仍然很弱
 
@@ -101,3 +103,29 @@ first_frame = nail_ref   # 美甲直接作为视频起点
 - 没有检查各段 image_list 是否包含产品参考图
 - 没有识别「产品特写段」并切换为 image2video 模式
 - 没有在多段生成后校验产品外观是否一致再合成
+
+---
+
+## 追问：成片首帧服装不一致 & seg1 第 0 帧失控
+
+### 成片首帧为什么与 seg1 整体不一致
+
+用户最早的 human 消息（消息 0）是「做泳衣展示大片」，`a_pBbpJVD`（橄榄绿比基尼模特图）以 `<original-image>` 标签挂在对话最顶部。用户在消息 17 改需求、换成美甲 UGC 广告，但**这张泳衣图从未从 context 里移除**，始终作为消息 0 的 original-image 存在于整个 38 条消息的上下文中，贯穿 generation-skill 生成阶段。
+
+seg1 的 image_list 只有 `[a_31vdnWr]`，prompt 对服装没有任何描述。Seedance 在无服装约束的情况下自由生成，受残留泳衣图影响或纯粹随机采样，产出的服装与 seg2/seg3 不同。
+
+**根本原因**：Pexo 没有在用户切换需求时清理上一轮的 original-image，旧素材污染了后续生成的视觉参考池。
+
+### 为什么 seg1 的第 0 帧是失控来源
+
+三段生成时 `first_frame` 均为 `NONE`：
+
+```
+nail_ugc_seg1: first_frame = NONE
+nail_ugc_seg2: first_frame = NONE
+nail_ugc_seg3: first_frame = NONE
+```
+
+Seedance reference2video 在 `first_frame = NONE` 时，**从零开始采样整段视频，包括第 0 帧**。第 0 帧没有任何视觉锚点，人物服装、美甲外观、姿态全部由模型自由决定。seg2 是手部特写（服装不可见），seg3 有美甲参考图约束整体造型，seg1 两者都没有，frame 0 出什么都不受控。
+
+generation-skill 缺少「首帧锁定」步骤：正确做法是在生成 seg1 前，先从概念片或人物参考图提取/生成一张确定的首帧图，以 `first_frame` 传入，把 seg1 的起始视觉状态钉死，再由 Seedance 从这个已知状态出发生成后续帧。
