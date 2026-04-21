@@ -32,6 +32,20 @@
 
 seg1 是正脸开场，但手部在画面中可见。没有美甲参考图，Seedance 完全自由发挥指甲外观，与 seg2/seg3 展示的克莱因蓝 3D 美甲毫无关联。seg1 的 prompt 里对美甲的描述也几乎为零，进一步放大了这个问题。
 
+### 根因溯源：参考图在 creative → generation 交接时丢失
+
+通过 trace 还原完整流程，发现美甲参考图的丢失有更具体的发生节点：
+
+**概念片阶段（creative-skill，trace-2）**：
+
+`ugc_nail_preview` 的 image_list = `[a_31vdnWr, a_b592vRD]`，人物图 + 美甲参考图**都正确传入**。但概念片里的美甲外观并非真正锚定——Seedance 是依靠 prompt 文字描述（"Klein blue, gold metal 3D sculptural decorations…"）自由生成的，图像仅作风格参考。用户看到概念片后确认通过，**实际上确认的是 prompt 描述出的效果，而非被参考图约束的效果**。
+
+**生产阶段（generation-skill，trace-3）**：
+
+generation-skill 接手后将视频拆成三段独立生成。在编排 seg1（正脸开场段）时，agent 认为「此段重点在人物，不需要美甲参考」，只保留了人物图，将 `a_b592vRD` 从 seg1 的 image_list 中删除。seg2/seg3 因为内容明确涉及美甲才保留了参考图。
+
+**本质**：generation-skill 在多段拆分时，对「哪些段需要哪些参考图」做了主观判断，而不是将 creative-skill 确定的 image_list 原样带下去。正脸段因手部不是主体而被认为无需美甲参考，但 Seedance 生成时手部仍然可见，美甲外观因此完全失控。
+
 ### 2. seg2/seg3 有参考图但锚定仍然很弱
 
 即便 seg2/seg3 都传入了美甲参考图 `a_b592vRD`：
