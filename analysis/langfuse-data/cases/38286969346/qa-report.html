@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 38286969346 — 字幕与安全区</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; }
+    h1 { font-size: 1.35rem; }
+    h2 { font-size: 1.1rem; margin-top: 1.75rem; }
+    .meta { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    code, pre { font-family: ui-monospace, monospace; font-size: 0.85rem; }
+    pre { background: #f4f4f5; padding: 1rem; overflow-x: auto; border-radius: 6px; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    th, td { border: 1px solid #ccc; padding: 0.45rem 0.6rem; text-align: left; vertical-align: top; }
+    th { background: #eee; }
+    ul { padding-left: 1.2rem; }
+    .p1 { border-left: 4px solid #c00; padding-left: 0.75rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Case 38286969346 — 首次成片字幕超出安全区</h1>
+  <p class="meta">Langfuse trace: <code>trace-1-15c5c7f0.json</code> · 成片 <code>corporate_tax_ad_final</code> · 720×1280 · 2026-05-04</p>
+
+  <section class="p1">
+    <strong>现象</strong>：首版成片底部英文字幕在观感上超出平台/画幅常用安全区（横向出画或贴底）。
+  </section>
+
+  <h2>根因（trace 可核对）</h2>
+  <ul>
+    <li><strong>横向</strong>：<code>execute_edit_video</code> 使用 <code>kind: "text"</code>，首句整段英文单行 + <code>fontsize: 30</code>，在 720 宽下估算 <code>text_w &gt; w</code>，<code>x: (w-text_w)/2</code> 无法把整行收进安全宽度。</li>
+    <li><strong>纵向</strong>：统一 <code>y: h-220</code> 为与内容行高脱钩的固定像素，多行或描边时易显贴底；竖版 9:16 常需更大底留白。</li>
+    <li><strong>数据源</strong>：TTS 已返回 <code>subtitle_file</code>，成片用手写多段 <code>text</code> 时间窗，未用 cue 级真源。</li>
+  </ul>
+
+  <h2>解决方法（执行清单）</h2>
+  <table>
+    <thead><tr><th>项</th><th>做法</th></tr></thead>
+    <tbody>
+      <tr><td>横向</td><td>超长句拆多条 clip 或降字号；保证单行宽度 &lt; 约 0.84w～0.88w。</td></tr>
+      <tr><td>纵向</td><td>禁止全局 <code>h-220</code> / <code>h-130</code>；改用 <code>y: h-text_h-h*0.10</code>（或等价底留白 12%～18% 画高）。</td></tr>
+      <tr><td>时间轴</td><td>优先用 <code>subtitle_file</code> 的 cue 起止 + 各段 VO 的 <code>start_ms</code> 换算绝对时间。</td></tr>
+      <tr><td>轨类型</td><td>产品支持时优先 <code>kind: "subtitle"</code> + 规范 <code>margin_v</code>；须满足渲染器对 <code>out_ms</code> 等字段的要求。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>证据摘录（edit_spec）</h2>
+  <pre>"kind": "text",
+"text_opts": {
+  "fontsize": "30",
+  "x": "(w-text_w)/2",
+  "y": "h-220",
+  ...
+}</pre>
+
+  <p class="meta">本页为 case 分析摘要；完整原始 trace 见本目录 <code>trace-*.json</code>（体积较大，未随仓库强依赖）。</p>
+</body>
+</html>
