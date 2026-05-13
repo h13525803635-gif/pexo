@@ -1,0 +1,60 @@
+[
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "017d0d146ee83e55",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "product_closeup_seg",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "04603ea278281f20",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "host_intro_seg",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "649ba0e61c28e8f5",
+    "prompt": "[excited] 姐妹们！你们的皮肤补水问题，这两款就够了！这支粉嫩精华液，玫瑰萃取，三滴渗透深层，整夜修护！配上这个白色保湿乳，锁水不油腻，清晨一摸，皮肤嫩到发光！真的，护肤这件事，选对了才事半功倍！",
+    "model": "eleven_v3",
+    "name": "chinese_voiceover",
+    "type": "audio",
+    "voice_id": "pFZP5JQG7iQjIQuC4Bku"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "9253fee798609a36",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "ai_host_ref",
+    "type": "image"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "a1e273a921de8b11",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/12206924087/workspace/assets/skincare_host_final.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-50cce680.json",
+    "observation_id": "be72a29f223f27e6",
+    "prompt": "",
+    "model": "kling-v3-omni",
+    "mode": "text2video",
+    "name": "product_showcase_seg",
+    "type": "video"
+  }
+]

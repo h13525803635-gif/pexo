@@ -1,0 +1,65 @@
+[
+  {
+    "type": "voiceover",
+    "name": "chinese_voiceover",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+    "language_code": "zh",
+    "text": "[excited] 姐妹们！你们的皮肤补水问题，这两款就够了！这支粉嫩精华液，玫瑰萃取，三滴渗透深层，整夜修护！配上这个白色保湿乳，锁水不油腻，清晨一摸，皮肤嫩到发光！真的，护肤这件事，选对了才事半功倍！"
+  },
+  {
+    "type": "video",
+    "name": "product_closeup_seg",
+    "provider": "kling",
+    "model": "kling-v3-omni",
+    "prompt": "Beautiful young Asian female beauty influencer smiling confidently at camera, holding both skincare products up close to the camera lens — the pink serum dropper bottle on the left and the white pump lotion bottle on the right. She winks playfully and gives a thumbs up, saying something warm and encouraging. Warm glowing skin, bright studio lighting with soft bokeh background. SFX: upbeat ambient studio tone, light cheerful background music fade in.",
+    "sound": "on",
+    "duration": "6",
+    "aspect_ratio": "9:16",
+    "has_audio_list": false,
+    "references": [
+      "ai_host_ref_20260513T013703_6e71fa86.png",
+      "a_BhBqapE_image.png",
+      "a_6uL53Qf_image_1.png"
+    ]
+  },
+  {
+    "type": "image",
+    "name": "ai_host_ref",
+    "provider": "seedream",
+    "model": "seedream-4-5-251128",
+    "prompt": "Beautiful young Asian female beauty influencer and skincare presenter, 25 years old, bright natural makeup with glowing skin, warm and confident smile, wearing light pink casual top, long black hair, clean modern beauty studio background with soft warm lighting, bokeh background, professional beauty vlog style, looking directly at camera, natural pose, no visible brand logos"
+  },
+  {
+    "type": "video",
+    "name": "product_showcase_seg",
+    "provider": "kling",
+    "model": "kling-v3-omni",
+    "prompt": "Beautiful young Asian female beauty influencer in a modern studio, holding a white pump bottle lotion in her left hand and the pink serum dropper bottle in her right hand. She smiles warmly and shows both products to the camera, alternating attention between them. Demonstrating how to use the products by gently pumping the lotion and applying a drop to her wrist. Glowing, radiant skin. Warm lighting, clean minimal background. SFX: soft pump sound of the lotion bottle, gentle liquid dripping sound.",
+    "sound": "on",
+    "duration": "8",
+    "aspect_ratio": "9:16",
+    "has_audio_list": false,
+    "references": [
+      "ai_host_ref_20260513T013703_6e71fa86.png",
+      "a_6uL53Qf_image_1.png",
+      "a_BhBqapE_image.png"
+    ]
+  },
+  {
+    "type": "video",
+    "name": "host_intro_seg",
+    "provider": "kling",
+    "model": "kling-v3-omni",
+    "prompt": "Beautiful young Asian female beauty influencer presenting skincare products directly to camera in a modern bright studio. She holds a small pink serum dropper bottle in her right hand, excitedly showing it to the camera with an expressive and enthusiastic expression. Natural gestures, confident smile, talking to camera like a live streamer. Warm soft studio lighting, clean background. SFX: soft ambient studio hum, gentle click of the dropper bottle being picked up.",
+    "sound": "on",
+    "duration": "6",
+    "aspect_ratio": "9:16",
+    "has_audio_list": false,
+    "references": [
+      "ai_host_ref_20260513T013703_6e71fa86.png",
+      "a_BhBqapE_image.png"
+    ]
+  }
+]

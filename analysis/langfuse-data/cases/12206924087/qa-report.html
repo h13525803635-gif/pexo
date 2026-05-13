@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 12206924087 — AI 主播口播视频「无对口型」全链路调用分析</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #c9d1d9; --text-dim: #8b949e;
+      --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+      --orange: #d29922; --purple: #bc8cff; --pink: #f778ba;
+      --cyan: #39d353; --yellow: #e3b341;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; line-height: 1.8; }
+    .header .case-id { font-family: 'SF Mono', 'Fira Code', monospace; color: var(--accent); font-size: 13px; margin-top: 4px; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .value { font-size: 28px; font-weight: 700; }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .value.green { color: var(--green); }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.orange { color: var(--orange); }
+    .stat-card .value.purple { color: var(--purple); }
+    .stat-card .desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+    section { margin-bottom: 56px; }
+    section > h2 { font-size: 20px; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    section > h2 .h-tag { font-size: 11px; padding: 2px 10px; border-radius: 4px; background: var(--surface2); color: var(--text-dim); font-weight: 500; }
+
+    /* Problem Cards */
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+    .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .problem-card.p0::before { background: var(--red); }
+    .problem-card.p1::before { background: var(--orange); }
+    .problem-card.p2::before { background: var(--yellow); }
+    .problem-card.p3::before { background: var(--purple); }
+    .problem-card .p-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .problem-card .p-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .p0 .p-num { background: rgba(248,81,73,0.2); color: var(--red); }
+    .p1 .p-num { background: rgba(210,153,34,0.2); color: var(--orange); }
+    .p2 .p-num { background: rgba(227,179,65,0.2); color: var(--yellow); }
+    .p3 .p-num { background: rgba(188,140,255,0.2); color: var(--purple); }
+    .problem-card .p-title { font-size: 15px; font-weight: 600; flex: 1; }
+    .problem-card .p-sev { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+    .p0 .p-sev { background: rgba(248,81,73,0.2); color: var(--red); }
+    .p1 .p-sev { background: rgba(210,153,34,0.2); color: var(--orange); }
+    .p2 .p-sev { background: rgba(227,179,65,0.2); color: var(--yellow); }
+    .p3 .p-sev { background: rgba(188,140,255,0.2); color: var(--purple); }
+    .problem-card .p-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.7; }
+    .problem-card .p-detail { font-size: 13px; line-height: 1.7; color: var(--text); }
+    .problem-card .p-detail code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .problem-card .p-evidence { margin-top: 12px; padding: 10px 12px; background: var(--surface2); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; font-size: 12px; color: var(--text-dim); font-style: italic; }
+    .problem-card .p-evidence strong { color: var(--text); font-style: normal; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .tl-item { position: relative; margin-bottom: 14px; }
+    .tl-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .tl-item.error::before { border-color: var(--red); background: rgba(248,81,73,0.3); }
+    .tl-item.success::before { border-color: var(--green); background: rgba(63,185,80,0.3); }
+    .tl-item.warn::before { border-color: var(--orange); background: rgba(210,153,34,0.3); }
+    .tl-item.tool::before { border-color: var(--accent); background: rgba(88,166,255,0.3); }
+    .tl-item .tl-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+    .tl-item .tl-time { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--text-dim); }
+    .tl-item .tl-tool { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; padding: 2px 8px; border-radius: 4px; background: var(--surface2); color: var(--accent); font-weight: 600; }
+    .tl-item .tl-status { font-size: 11px; padding: 1px 7px; border-radius: 3px; font-weight: 600; }
+    .tl-item .tl-status.ok { background: rgba(63,185,80,0.15); color: var(--green); }
+    .tl-item .tl-status.err { background: rgba(248,81,73,0.15); color: var(--red); }
+    .tl-item .tl-body { font-size: 12px; color: var(--text-dim); line-height: 1.6; padding-left: 4px; }
+    .tl-item .tl-body code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; background: var(--surface2); padding: 1px 5px; border-radius: 3px; color: var(--text); }
+
+    /* Compare Table */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .compare-table th { text-align: left; padding: 12px 16px; background: var(--surface2); color: var(--text-dim); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table .before { color: var(--red); }
+    .compare-table .after { color: var(--green); }
+    .compare-table code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+
+    /* Media Gallery */
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .media-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .media-card video, .media-card img { width: 100%; max-height: 480px; object-fit: contain; background: #000; display: block; }
+    .media-card img { background: var(--surface2); }
+    .media-card .media-info { padding: 12px 14px; }
+    .media-card .media-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .media-card .media-meta { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.5; }
+    .media-card .media-meta .k { color: var(--text); }
+    .media-card .media-meta .warn { color: var(--orange); font-weight: 600; }
+    .media-card .media-meta .err { color: var(--red); font-weight: 600; }
+    .media-card details { margin-top: 8px; }
+    .media-card summary { cursor: pointer; font-size: 12px; color: var(--accent); }
+    .media-card pre { font-size: 11px; line-height: 1.55; white-space: pre-wrap; margin-top: 6px; padding: 10px; background: var(--surface2); border-radius: 6px; color: var(--text); max-height: 240px; overflow-y: auto; }
+    .media-card .placeholder { display: flex; align-items: center; justify-content: center; height: 200px; background: var(--surface2); color: var(--text-dim); font-size: 12px; }
+
+    /* Inline blocks */
+    .callout { background: var(--surface); border-left: 3px solid var(--red); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px; }
+    .callout.warn { border-left-color: var(--orange); }
+    .callout.ok { border-left-color: var(--green); }
+    .callout p { font-size: 13px; line-height: 1.7; }
+    .callout strong { color: var(--accent); }
+
+    .chain { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 2; color: var(--text); white-space: pre-wrap; }
+    .chain .arrow { color: var(--text-dim); }
+    .chain .bad { color: var(--red); }
+    .chain .neutral { color: var(--text); }
+
+    pre.code-block { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.6; padding: 16px; background: var(--surface2); border-radius: 8px; overflow-x: auto; color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <h1>Case 12206924087 — AI 主播口播视频「无对口型」全链路调用分析</h1>
+    <p class="subtitle">用户需求：「做一个 AI 主播口播视频介绍这款产品，要有中文配音」<br>
+      最终交付：<code>skincare_host_final.mp4</code> · 25s · 9:16 · 720×1280<br>
+      问题：嘴型与中文配音完全不同步，残留英文 co-gen 人声</p>
+    <p class="case-id">trace-1-50cce680.json · 155 observations · 520s · 2026-05-13</p>
+  </header>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stat-card">
+      <div class="label">P0 问题</div>
+      <div class="value red">2</div>
+      <div class="desc">路由跳过 + 模型错配</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">P1 问题</div>
+      <div class="value orange">3</div>
+      <div class="desc">装配错误 + 用户告知缺失</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">P2 问题</div>
+      <div class="value">3</div>
+      <div class="desc">补丁式工艺缺陷</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">复现历史 case</div>
+      <div class="value purple">4</div>
+      <div class="desc">04453569710 / 96933223677 等</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">工具调用</div>
+      <div class="value accent">29</div>
+      <div class="desc">含 3 次 video_generate</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">读 skill 文件</div>
+      <div class="value orange">3</div>
+      <div class="desc">未读 generation/script-skill</div>
+    </div>
+  </section>
+
+  <!-- TL;DR -->
+  <section>
+    <h2>核心结论 <span class="h-tag">TL;DR</span></h2>
+    <div class="callout">
+      <p><strong>kling 路由不在预期范围内。</strong>用户「主播 + 口播 + 中文配音」的关键词组合，按已沉淀的标准产线（case 04453569710、96933223677）应当路由到 <code>seedance reference2video + audio_list (TTS) + sound:"on"</code>。本 case 的 Agent <strong>跳过了路由决策层</strong>（generation-skill / script-skill 一次都没读），凭先验直接选了 <code>kling-v3-omni reference2video</code>，并且 <strong>没传 audio_list、保留 sound:"on"</strong>，导致模型自由 co-gen 出英文人声、嘴型零驱动。后续装配阶段又违反 assembly-skill 硬规则手算字幕时间，并把英文 co-gen 人声压到 0.2 而不是归零，最终交付时对所有这些差异零字披露。</p>
+    </div>
+  </section>
+
+  <!-- Failure Chain -->
+  <section>
+    <h2>关键失败链 <span class="h-tag">Causal Chain</span></h2>
+    <div class="chain"><span class="bad">用户口播需求</span>
+  <span class="arrow">↓</span>
+<span class="bad">Agent 跳过 generation-skill / script-skill 路由层</span>
+  <span class="arrow">↓</span>
+<span class="bad">凭先验选 kling-v3-omni reference2video（默认产线，不是口播产线）</span>
+  <span class="arrow">↓</span>
+<span class="bad">不传 audio_list（嘴型零驱动） + sound:"on"（让模型自己 co-gen 英文人声）</span>
+  <span class="arrow">↓</span>
+<span class="bad">TTS 独立做 → 三套时间轴互不相干（嘴 vs 中文配音 vs 残留英文）</span>
+  <span class="arrow">↓</span>
+<span class="bad">装配阶段没归零视频音轨（保留 0.2 英文人声）</span>
+  <span class="arrow">↓</span>
+<span class="bad">字幕手算时间（无视 ElevenLabs alignment json，违反 assembly-skill 硬规则）</span>
+  <span class="arrow">↓</span>
+<span class="bad">时长不够用同一段重复 5s 凑齐</span>
+  <span class="arrow">↓</span>
+<span class="bad">交付时一句风险都不提</span></div>
+  </section>
+
+  <!-- Problem Cards -->
+  <section>
+    <h2>问题清单 <span class="h-tag">10 项</span></h2>
+    <div class="problem-grid">
+
+      <div class="problem-card p0">
+        <div class="p-head">
+          <div class="p-num">1</div>
+          <div class="p-title">跳过 generation-skill / script-skill 路由文件</div>
+          <div class="p-sev">P0</div>
+        </div>
+        <div class="p-desc">系统提示词归属：模型路由由 generation-skill / script-skill owns。但 Agent 全程 4 次 read_file 只加载 brainstorm-skill、image-generation-guide、assembly-skill（且 assembly-skill 是被 edit_video 报错逼着才读的）。模型选择凭先验。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 91/145/110/65 全部 read_file 调用清单中无 generation-skill / script-skill / video-models-scheduling
+        </div>
+      </div>
+
+      <div class="problem-card p0">
+        <div class="p-head">
+          <div class="p-num">2</div>
+          <div class="p-title">video_generate 参数全错配</div>
+          <div class="p-sev">P0</div>
+        </div>
+        <div class="p-desc">3 次 <code>video_generate</code> 全部使用 <code>provider=kling, model=kling-v3-omni, mode=reference2video, sound:"on"</code>，<strong>无 audio_list</strong>。kling 不在标准口播产线上，且 kling_reference2video provider_param 不是 lipsync key。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 127/115/63 全部 provider_param 缺失 audio_list；按 case 04453569710 应为 seedance + audio_list + sound:"on"
+        </div>
+      </div>
+
+      <div class="problem-card p1">
+        <div class="p-head">
+          <div class="p-num">3</div>
+          <div class="p-title">规划缺失对口型 todo</div>
+          <div class="p-sev">P1</div>
+        </div>
+        <div class="p-desc">7 次 write_todos 全程都没有「对口型 / 音画耦合」节点。生成视频与做配音被规划成两条独立流水线。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 124/93/49/120/101/90/54 todo 文本无任何 lipsync / audio_list / 口型 / 音画 关键词
+        </div>
+      </div>
+
+      <div class="problem-card p1">
+        <div class="p-head">
+          <div class="p-num">4</div>
+          <div class="p-title">检测到英文 co-gen 后只压音量到 0.2</div>
+          <div class="p-sev">P1</div>
+        </div>
+        <div class="p-desc">obs 144 检测到「video features a young woman speaking in English」。Agent 没有重生成视频或归零音轨，只压到 vol 0.2 仍可听。<strong>精确复现 case 96933223677 的双音轨问题</strong>。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 41 输出 + obs 125 最终 edit_spec 视频轨四段统一 <code>volume: 0.2</code>
+        </div>
+      </div>
+
+      <div class="problem-card p1">
+        <div class="p-head">
+          <div class="p-num">5</div>
+          <div class="p-title">字幕手算时间（违反 assembly-skill 硬规则）</div>
+          <div class="p-sev">P1</div>
+        </div>
+        <div class="p-desc"><code>audio_produce</code> 已返回 <code>chinese_voiceover_subtitle_*.json</code> 字级对齐文件，但 Agent 用 <code>kind=text</code> 手算 5 段 start_ms/end_ms。assembly-skill 第 127 条明确：「If a subtitle_file exists, manually constructing kind=text clips with hand-calculated start_ms/out_ms values is <strong>blocked</strong>」。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 25 audio_produce 返回 subtitle_file，但 obs 125 edit_spec 用的是手填毫秒
+        </div>
+      </div>
+
+      <div class="problem-card p1">
+        <div class="p-head">
+          <div class="p-num">6</div>
+          <div class="p-title">交付时零风险告知</div>
+          <div class="p-sev">P1</div>
+        </div>
+        <div class="p-desc">最终回复称「AI主播口播视频，配有同步中文字幕，视频原声已压低让配音清晰突出」，没提：嘴型对的是英文台词、残留 20% 英文人声、字幕是手算的、最后 5s 是重播。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 3 LLM 输出 + brainstorm-skill 第 38 条「flag the risk」原则未执行
+        </div>
+      </div>
+
+      <div class="problem-card p2">
+        <div class="p-head">
+          <div class="p-num">7</div>
+          <div class="p-title">时长不足 → 同段视频连放两遍补 5s</div>
+          <div class="p-sev">P2</div>
+        </div>
+        <div class="p-desc">视频 6+8+6=20s，VO 24.96s。Agent 把 product_closeup_seg 在时间线上播两遍（6s + 5s），最后 11s 都是同一段「双手持产品特写」在循环。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 125 video track 第 3、4 个 clip 都引用 product_closeup_seg
+        </div>
+      </div>
+
+      <div class="problem-card p2">
+        <div class="p-head">
+          <div class="p-num">8</div>
+          <div class="p-title">analyze_audio 失败被静默忽略</div>
+          <div class="p-sev">P2</div>
+        </div>
+        <div class="p-desc"><code>video-editor__analyze_audio</code> 因文件路径截断返回「input file reference could not be resolved」，Agent 没重试也没切其他探测方式，直接进入下一步。后续无法做 audio-aware mixing。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 34 错误输出，obs 70 调用后无后续重试
+        </div>
+      </div>
+
+      <div class="problem-card p2">
+        <div class="p-head">
+          <div class="p-num">9</div>
+          <div class="p-title">视频轨 4 段统一 vol 0.2，未做 audio-aware mixing</div>
+          <div class="p-sev">P2</div>
+        </div>
+        <div class="p-desc">assembly-skill 第 103 条要求 sound-on + VO 应为 0.3-0.6，按 LUFS 计算各段差异。Agent hard-coded 0.2 比下限还低，是为了死压 co-gen 英文。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 125 视频轨 4 段 volume 全为 0.2
+        </div>
+      </div>
+
+      <div class="problem-card p3">
+        <div class="p-head">
+          <div class="p-num">10</div>
+          <div class="p-title">assembly-skill 是被报错逼着才读的</div>
+          <div class="p-sev">P3</div>
+        </div>
+        <div class="p-desc">两次 execute_edit_video 因 <code>kind=subtitle</code> 缺 source 失败后，Agent 才 read_file 加载 assembly-skill。说明 DSL 不熟，事前未规划。</div>
+        <div class="p-evidence">
+          <strong>证据：</strong>obs 30/38 失败 → obs 110/65 才补读 SKILL.md
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Compare Table -->
+  <section>
+    <h2>video_generate 参数对比 <span class="h-tag">实际 vs 预期</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>参数</th>
+          <th>本次实际</th>
+          <th>标准产线（case 04453569710）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>provider</td>
+          <td><code class="before">kling</code></td>
+          <td><code class="after">seedance</code></td>
+        </tr>
+        <tr>
+          <td>model</td>
+          <td><code class="before">kling-v3-omni</code></td>
+          <td><code class="after">doubao-seedance-2-0-260128</code></td>
+        </tr>
+        <tr>
+          <td>provider_param key</td>
+          <td><code class="before">kling_reference2video</code> （非 lipsync key）</td>
+          <td><code class="after">seedance_reference2video</code> + audio_list</td>
+        </tr>
+        <tr>
+          <td>sound</td>
+          <td><code class="before">"on"</code> → 模型 co-gen 英文人声</td>
+          <td><code class="after">"on"</code>（仅当 audio_list = TTS 唯一音源）</td>
+        </tr>
+        <tr>
+          <td>audio_list</td>
+          <td class="before"><strong>缺失</strong>（嘴型零驱动）</td>
+          <td class="after">传入中文 TTS MP3 切片（≤15s/段）</td>
+        </tr>
+        <tr>
+          <td>装配视频轨 volume</td>
+          <td><code class="before">0.2</code>（残留英文人声 20%）</td>
+          <td><code class="after">0</code>（双音轨防双开）</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Timeline -->
+  <section>
+    <h2>调用时序 <span class="h-tag">29 次工具调用</span></h2>
+    <div class="timeline">
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:35:33</span><span class="tl-tool">user_input</span></div>
+        <div class="tl-body">「做一个AI主播口播视频介绍这款产品，要有中文配音」+ 2 张产品图</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-head"><span class="tl-time">01:35:37</span><span class="tl-tool">write_todos</span><span class="tl-status err">⚠ 缺对口型</span></div>
+        <div class="tl-body">6 项 todo 中无「对口型 / 音画耦合」步骤</div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:35:42</span><span class="tl-tool">analyze_file_content × 2</span></div>
+        <div class="tl-body">识别两张产品图：粉色精华 + 白色乳液</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-head"><span class="tl-time">01:36:07</span><span class="tl-tool">read_file</span><span class="tl-status err">缺 generation-skill</span></div>
+        <div class="tl-body"><code>brainstorm-skill/SKILL.md</code> + 后续 <code>image-generation-guide.md</code>。<strong>generation-skill / script-skill 全程未读</strong></div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:36:49</span><span class="tl-tool">image_generate</span></div>
+        <div class="tl-body">seedream-4-5 生成 ai_host_ref（主播形象参考图）</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:37:27</span><span class="tl-tool">video_generate (host_intro_seg)</span><span class="tl-status err">参数错配</span></div>
+        <div class="tl-body"><code>kling-v3-omni reference2video, sound:"on", duration:6</code>，<strong>无 audio_list</strong></div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:37:27</span><span class="tl-tool">video_generate (product_showcase_seg)</span><span class="tl-status err">参数错配</span></div>
+        <div class="tl-body">同上，<code>duration:8</code></div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:37:27</span><span class="tl-tool">audio_produce</span></div>
+        <div class="tl-body">elevenlabs eleven_v3, zh, voice_id=pFZP5..., 24.96s。返回 subtitle_file（后续被无视）</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:39:59</span><span class="tl-tool">video-editor__analyze_audio</span><span class="tl-status err">FAILED</span></div>
+        <div class="tl-body">文件路径截断 → 「input file reference could not be resolved」。Agent 未重试</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:39:59</span><span class="tl-tool">video_generate (product_closeup_seg)</span><span class="tl-status err">参数错配</span></div>
+        <div class="tl-body">同上 kling-v3-omni 配置，<code>duration:6</code> 用于补足时长</div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:41:44</span><span class="tl-tool">ffprobe × 3</span></div>
+        <div class="tl-body">视频时长 6+8+6=20s，VO=24.96s，差 5s</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:42:17</span><span class="tl-tool">execute_edit_video #1</span><span class="tl-status err">FAILED</span></div>
+        <div class="tl-body"><code>kind=subtitle</code> 缺 source file → DSL 校验失败</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-head"><span class="tl-time">01:42:20</span><span class="tl-tool">list_fonts × 2</span></div>
+        <div class="tl-body">字体名修正 noto-sans-sc → noto-sans-cjksc</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-head"><span class="tl-time">01:42:33</span><span class="tl-tool">execute_edit_video #2</span><span class="tl-status err">FAILED</span></div>
+        <div class="tl-body">仍然 <code>kind=subtitle</code> + 无 source → 同样错误</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-head"><span class="tl-time">01:42:38</span><span class="tl-tool">read_file × 2</span><span class="tl-status err">事后补读</span></div>
+        <div class="tl-body"><code>assembly-skill/SKILL.md</code>（被 edit_video 报错逼着才读）</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-head"><span class="tl-time">01:42:49</span><span class="tl-tool">analyze_file_content</span></div>
+        <div class="tl-body">检测 host_intro_seg 音轨 → <strong>「young woman speaking in English」</strong>。Agent 反应：把视频音量压到 0.2</div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:43:23</span><span class="tl-tool">execute_edit_video #3</span><span class="tl-status ok">SUCCESS</span></div>
+        <div class="tl-body"><code>kind=text</code> 手算 5 段字幕 + 视频轨 vol 0.2 + product_closeup 重复一段补足 25s</div>
+      </div>
+      <div class="tl-item success">
+        <div class="tl-head"><span class="tl-time">01:44:01</span><span class="tl-tool">show_final_video</span></div>
+        <div class="tl-body">交付 skincare_host_final.mp4（25s 720x1280）。回复用户「配音清晰突出」（隐瞒了所有问题）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Gallery -->
+  <section>
+    <h2>素材画廊 <span class="h-tag">附完整 prompt</span></h2>
+
+    <h3 style="margin: 16px 0 12px; font-size: 15px; color: var(--text-dim);">参考图（image_generate）</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <div class="placeholder">未下载（仅 workspace 路径）</div>
+        <div class="media-info">
+          <div class="media-name">ai_host_ref</div>
+          <div class="media-meta"><span class="k">seedream</span> · seedream-4-5-251128</div>
+          <details><summary>查看 prompt</summary>
+<pre>Beautiful young Asian female beauty influencer and skincare presenter, 25 years old, bright natural makeup with glowing skin, warm and confident smile, wearing light pink casual top, long black hair, clean modern beauty studio background with soft warm lighting, bokeh background, professional beauty vlog style, looking directly at camera, natural pose, no visible brand logos</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin: 24px 0 12px; font-size: 15px; color: var(--text-dim);">视频片段（video_generate · 全部 kling-v3-omni）</h3>
+    <div class="media-grid">
+
+      <div class="media-card">
+        <video controls preload="metadata" src="media/host_intro_seg_20260513T013904_1f7834ad.mp4"></video>
+        <div class="media-info">
+          <div class="media-name">host_intro_seg <span style="color:var(--text-dim);font-weight:400">· 6s</span></div>
+          <div class="media-meta">
+            <span class="k">kling</span> · kling-v3-omni · reference2video<br>
+            <span class="warn">sound: "on"</span> · <span class="err">audio_list: 缺失</span><br>
+            参考图: ai_host_ref + 粉色精华
+          </div>
+          <details><summary>查看 prompt</summary>
+<pre>Beautiful young Asian female beauty influencer presenting skincare products directly to camera in a modern bright studio. She holds a small pink serum dropper bottle in her right hand, excitedly showing it to the camera with an expressive and enthusiastic expression. Natural gestures, confident smile, talking to camera like a live streamer. Warm soft studio lighting, clean background. SFX: soft ambient studio hum, gentle click of the dropper bottle being picked up.</pre>
+          </details>
+        </div>
+      </div>
+
+      <div class="media-card">
+        <video controls preload="metadata" src="media/product_showcase_seg_20260513T013946_572e45b1.mp4"></video>
+        <div class="media-info">
+          <div class="media-name">product_showcase_seg <span style="color:var(--text-dim);font-weight:400">· 8s</span></div>
+          <div class="media-meta">
+            <span class="k">kling</span> · kling-v3-omni · reference2video<br>
+            <span class="warn">sound: "on"</span> · <span class="err">audio_list: 缺失</span><br>
+            参考图: ai_host_ref + 双产品
+          </div>
+          <details><summary>查看 prompt</summary>
+<pre>Beautiful young Asian female beauty influencer in a modern studio, holding a white pump bottle lotion in her left hand and the pink serum dropper bottle in her right hand. She smiles warmly and shows both products to the camera, alternating attention between them. Demonstrating how to use the products by gently pumping the lotion and applying a drop to her wrist. Glowing, radiant skin. Warm lighting, clean minimal background. SFX: soft pump sound of the lotion bottle, gentle liquid dripping sound.</pre>
+          </details>
+        </div>
+      </div>
+
+      <div class="media-card">
+        <video controls preload="metadata" src="media/product_closeup_seg_20260513T014135_95f68cec.mp4"></video>
+        <div class="media-info">
+          <div class="media-name">product_closeup_seg <span style="color:var(--text-dim);font-weight:400">· 6s（在最终时间线上重复播放 5s 凑齐）</span></div>
+          <div class="media-meta">
+            <span class="k">kling</span> · kling-v3-omni · reference2video<br>
+            <span class="warn">sound: "on"</span> · <span class="err">audio_list: 缺失</span><br>
+            参考图: ai_host_ref + 双产品
+          </div>
+          <details><summary>查看 prompt</summary>
+<pre>Beautiful young Asian female beauty influencer smiling confidently at camera, holding both skincare products up close to the camera lens — the pink serum dropper bottle on the left and the white pump lotion bottle on the right. She winks playfully and gives a thumbs up, saying something warm and encouraging. Warm glowing skin, bright studio lighting with soft bokeh background. SFX: upbeat ambient studio tone, light cheerful background music fade in.</pre>
+          </details>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 style="margin: 24px 0 12px; font-size: 15px; color: var(--text-dim);">配音（audio_produce）</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <div class="placeholder">未下载（仅 workspace 路径）</div>
+        <div class="media-info">
+          <div class="media-name">chinese_voiceover <span style="color:var(--text-dim);font-weight:400">· 24.96s</span></div>
+          <div class="media-meta">
+            <span class="k">elevenlabs</span> · eleven_v3 · zh<br>
+            voice_id: pFZP5JQG7iQjIQuC4Bku<br>
+            stability 0.45 / similarity 0.8 / speed 1.05<br>
+            <span class="warn">subtitle_file 已返回但未被使用</span>
+          </div>
+          <details><summary>查看台词</summary>
+<pre>[excited] 姐妹们！你们的皮肤补水问题，这两款就够了！这支粉嫩精华液，玫瑰萃取，三滴渗透深层，整夜修护！配上这个白色保湿乳，锁水不油腻，清晨一摸，皮肤嫩到发光！真的，护肤这件事，选对了才事半功倍！</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Cross References -->
+  <section>
+    <h2>与已有判例的对应关系 <span class="h-tag">复现 4 个历史 case</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>本 case 现象</th>
+          <th>已有 case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>嘴型不驱动音频 → 无对口型</td>
+          <td><code>04453569710</code> 口播音画不同步</td>
+        </tr>
+        <tr>
+          <td>sound:on + 独立 TTS 双音轨叠加</td>
+          <td><code>96933223677</code> 数字人 + 旁白双开</td>
+        </tr>
+        <tr>
+          <td>字幕手算时间 → 与 TTS 漂移</td>
+          <td><code>14194336910</code> 字幕重叠 / <code>30929014795</code> VO-字幕同步</td>
+        </tr>
+        <tr>
+          <td>主播戏剧台词被替换为 co-gen 英文</td>
+          <td><code>50814051508</code> 旁白脚本不一致</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 12px; color: var(--text-dim); font-size: 13px;">这些 case 的修复要么没落地到 skill，要么落地了但 Agent 没读到（generation-skill 没被打开）。</p>
+  </section>
+
+  <!-- Recommendations -->
+  <section>
+    <h2>修复建议 <span class="h-tag">待确认后执行</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>优先级</th>
+          <th>目标 skill</th>
+          <th>改动</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="color:var(--red);font-weight:600">P0</span></td>
+          <td><code>brainstorm-skill</code></td>
+          <td>识别「主播 / 口播 / 数字人 / talking head」关键词时强制触发「必须读 generation-skill」前置 checklist</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--red);font-weight:600">P0</span></td>
+          <td><code>generation-skill / video-models-scheduling</code></td>
+          <td>升级为 hard rule：用户场景为口播且已有 TTS → 必须 seedance + audio_list + sound:"on"，禁止任何降级方案</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--orange);font-weight:600">P1</span></td>
+          <td><code>assembly-skill</code></td>
+          <td>sound-on 视频轨在存在独立 VO 时默认 vol=0；audio_produce 返回 subtitle_file 时必须使用 cue 级真源</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--orange);font-weight:600">P1</span></td>
+          <td><code>brainstorm-skill / 交付模板</code></td>
+          <td>当实际执行偏离用户口语理解（"对口型主播视频" → 实际"主播形象 + 旁白"）时，最终回复必须强制 disclose 差异</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--yellow);font-weight:600">P2</span></td>
+          <td><code>assembly-skill</code></td>
+          <td>analyze_audio 失败时禁止进入 mixing 阶段，必须先解决文件路径问题</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); font-size: 12px;">
+    Pexo Case Analysis · 12206924087 · 2026-05-13 ·
+    <a href="../../../case-12206924087-调用路径分析.md" style="color: var(--accent);">完整 markdown 报告</a>
+  </footer>
+
+</div>
+</body>
+</html>
