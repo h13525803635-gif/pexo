@@ -1,0 +1,90 @@
+[
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "abcac038b6b04923",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq1_asr",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "343ed15e7cb6d2ef",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "yamaguchi_seq1_hiroshima",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "543f016b93f2cf58",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/45125516390/workspace/assets/yamaguchi_final.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "56db853273ce1a27",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "yamaguchi_seq2_train_nagasaki",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "727c958183a81fe8",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq3_asr",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "833ab069fc158071",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "yamaguchi_bgm",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "a4a2ce6584d87d39",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "yamaguchi_seq3_survivor",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "cb7198d91cbaad2e",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq2_asr",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-b1598742.json",
+    "observation_id": "febc2f12e586c5cb",
+    "prompt": "In 1945, Tsutomu Yamaguchi was in Hiroshima — on the wrong morning. [sighs] He survived with burns. Crawled to safety. And somehow boarded a train home. Home... was Nagasaki. The next day, mid-sentence, describing the blast to his boss — the second bomb hit. Right outside his window. He survived that too. He lived to ninety-three.",
+    "model": "eleven_v3",
+    "name": "yamaguchi_vo",
+    "type": "audio",
+    "voice_id": "nPczCjzI2devNBz1zQrb"
+  }
+]

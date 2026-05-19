@@ -1,0 +1,54 @@
+[
+  {
+    "type": "video",
+    "name": "yamaguchi_seq3_survivor",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "8",
+    "aspect_ratio": "16:9",
+    "prompt": "Cinematic photorealistic look, desaturated warm sepia tones, slightly more golden warmth than the earlier scenes, organic 35mm film grain texture. [0-4s] Close-up of elderly Japanese man in his nineties, deeply wrinkled face, serene expression, seated near a window with soft afternoon light falling across his features. He looks out the window peacefully. Camera holds steady in close medium shot. [4-8s] Camera slowly pulls back, revealing the simple interior of a traditional Japanese room — tatami mats, paper walls, a small tea cup beside him, afternoon light streaming in through shoji screens casting golden patterns. As the camera pulls further back, the man grows smaller in the frame against the vast quietness of the room, a sense of profound solitude and survival. Final frame holds on the stillness. SFX: gentle interior silence, distant birds outside, soft wind through the shoji screens, quiet ambient room tone. No background music, no musical score — sound effects and ambient audio only.",
+    "references": []
+  },
+  {
+    "type": "video",
+    "name": "yamaguchi_seq1_hiroshima",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "10",
+    "aspect_ratio": "16:9",
+    "prompt": "Cinematic photorealistic look, desaturated warm sepia tones with deep shadows, WWII-era Japan 1945 aesthetic, organic 35mm film grain texture. [0-4s] Wide establishing shot of a quiet Hiroshima street at dawn — wooden buildings, paper lanterns unlit, a lone Japanese man in work clothes walking with a briefcase, camera slowly drifts forward tracking him from behind, long morning shadows, eerie calm silence broken only by distant wind. [4-7s] The man pauses, looks up — extreme wide shot of the city stretching to the horizon under a pale sky, a distant military plane barely visible. Camera holds still, atmosphere heavy with dread. [7-10s] Blinding white flash from above — the frame overexposes to pure white, then snaps back to reveal the man thrown against a wall, face burned, the city behind him consumed in a towering mushroom cloud of fire and black smoke rising over devastated buildings, debris raining down, his charred silhouette struggling upright. SFX: faint wind at opening, then deafening explosive shockwave, debris impacts, distant roaring fire, crackling burning wood. No background music, no musical score, no musical instruments — sound effects and ambient audio only.",
+    "references": []
+  },
+  {
+    "type": "video",
+    "name": "yamaguchi_seq2_train_nagasaki",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "12",
+    "aspect_ratio": "16:9",
+    "prompt": "Cinematic photorealistic look, desaturated warm sepia tones with deep shadows, WWII-era Japan 1945 aesthetic, organic 35mm film grain texture. [0-3s] Interior of a moving train, 1945 Japanese wooden passenger car — a bandaged Japanese man sits alone near the window, white bandages wrapped around his arms and neck, face gaunt and hollow-eyed with exhaustion, staring out the window at countryside passing. Medium shot, static camera. [3-7s] Exterior — steam locomotive pulling into Nagasaki station, wide shot, morning light, city visible in the background appearing peaceful and ordinary, Japanese civilians going about their day on the platform. Camera slowly pushes in on the city skyline as if the city itself is unaware. [7-12s] Interior office scene — the same bandaged man stands before a suited Japanese businessman behind a desk, gesturing as he describes something, his expression haunted and urgent, mid-sentence. Over the man's shoulder through the office window behind him — a distant blinding white flash suddenly ignites the horizon, the window glass cracks and shatters inward, a second mushroom cloud erupts, the office desk and papers blast sideways, both men thrown from frame. SFX: train wheels on tracks at opening, station ambient crowd sounds, then interior office — muffled city ambience, then another catastrophic shockwave explosion, shattering glass, rushing wind blast, papers scattering. No background music, no musical score — sound effects and ambient audio only.",
+    "references": []
+  },
+  {
+    "type": "music",
+    "name": "yamaguchi_bgm",
+    "provider": "elevenlabs",
+    "model": "music_v1",
+    "prompt": "(composition_plan)"
+  },
+  {
+    "type": "voiceover",
+    "name": "yamaguchi_vo",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "text": "In 1945, Tsutomu Yamaguchi was in Hiroshima — on the wrong morning. [sighs] He survived with burns. Crawled to safety. And somehow boarded a train home. Home... was Nagasaki. The next day, mid-sentence, describing the blast to his boss — the second bomb hit. Right outside his window. He survived that too. He lived to ninety-three.",
+    "duration": 26.012
+  }
+]
