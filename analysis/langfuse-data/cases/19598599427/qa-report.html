@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 19598599427 — V1 Wrong visual style</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #c9d1d9; --text-dim: #8b949e;
+      --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+      --orange: #d29922; --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; line-height: 1.8; max-width: 760px; margin: 0 auto; }
+    .header .case-id { font-family: monospace; color: var(--accent); font-size: 13px; margin-top: 8px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .value { font-size: 26px; font-weight: 700; }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.orange { color: var(--orange); }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    section { margin-bottom: 56px; }
+    section > h2 { font-size: 20px; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; }
+    .callout { background: var(--surface); border-left: 3px solid var(--red); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px; font-size: 13px; line-height: 1.7; }
+    .callout strong { color: var(--accent); }
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
+    .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+    .problem-card.p2::before { background: var(--orange); }
+    .problem-card .p-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .problem-card .p-cause { font-size: 12px; color: var(--red); margin-bottom: 6px; }
+    .problem-card .p-fix { font-size: 12px; color: var(--green); line-height: 1.6; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .compare-table th, .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--surface2); color: var(--text-dim); font-size: 12px; }
+    .compare-table .bad { color: var(--red); }
+    .compare-table .ok { color: var(--green); }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .tl-item { position: relative; margin-bottom: 14px; }
+    .tl-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .tl-item.error::before { border-color: var(--red); background: rgba(248,81,73,0.3); }
+    .tl-item.warn::before { border-color: var(--orange); background: rgba(210,153,34,0.3); }
+    .tl-item.success::before { border-color: var(--green); background: rgba(63,185,80,0.3); }
+    .tl-item .tl-head { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; }
+    .tl-time { color: var(--text-dim); font-family: monospace; }
+    .tl-tool { color: var(--accent); font-family: monospace; font-weight: 600; }
+    .tl-body { font-size: 13px; color: var(--text-dim); }
+    .chain { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; font-family: monospace; font-size: 12px; line-height: 1.9; white-space: pre-wrap; }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .media-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .media-card video { width: 100%; display: block; background: #000; }
+    .media-card .media-info { padding: 12px 14px; font-size: 12px; }
+    .media-card .media-name { font-weight: 600; margin-bottom: 4px; }
+    .media-card .media-meta { color: var(--text-dim); margin-bottom: 8px; }
+    .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-left: 6px; }
+    .badge.unused { background: rgba(248,81,73,0.2); color: var(--red); }
+    .badge.used { background: rgba(63,185,80,0.15); color: var(--green); }
+    details summary { cursor: pointer; color: var(--accent); font-size: 12px; }
+    details pre { margin-top: 8px; padding: 10px; background: var(--surface2); border-radius: 6px; font-size: 11px; white-space: pre-wrap; word-break: break-word; max-height: 200px; overflow: auto; }
+    .file-index { font-size: 13px; color: var(--text-dim); line-height: 2; }
+    .file-index code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .pipeline { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; font-size: 13px; line-height: 1.9; }
+    .pipeline ol { padding-left: 20px; }
+    .pipeline li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>Ubaid → DUBAI 字形动效 — V1 Wrong visual style</h1>
+    <p class="subtitle">用户只描述动效逻辑；Agent 未经确认锁定深蓝+金 D MG 风格，废弃已批 keyframe，成片用「Going to + U B A I + D」与扁平飞机贴纸 — 与「Ubaid 字谜 + 飞机穿字」不符</p>
+    <p class="case-id">Case ID: 19598599427 · V1 trace-3-f8e08738 · 成片 ubaid_to_dubai_animation.mp4 · 2026-05-18</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">P0 问题</div><div class="value red">4</div><div class="desc">风格 / keyframe / 字谜 / 飞机</div></div>
+    <div class="stat-card"><div class="label">P1 问题</div><div class="value orange">1</div><div class="desc">跳过 script</div></div>
+    <div class="stat-card"><div class="label">成片时长</div><div class="value accent">14s</div><div class="desc">1920×1080</div></div>
+    <div class="stat-card"><div class="label">Keyframe 进成片</div><div class="value red">0/2</div><div class="desc">仅 plane_icon</div></div>
+    <div class="stat-card"><div class="label">Langfuse traces</div><div class="value accent">6</div><div class="desc">V1 = trace-3</div></div>
+  </div>
+
+  <section>
+    <h2>核心结论</h2>
+    <div class="callout">
+      <strong>Wrong visual style 根因：</strong> 用户「ok」仅确认 <strong>16:9 / 10–15s</strong>，Agent 却将 <strong>dark navy + gold D + flat plane icon</strong> 当作已确认风格；且 <strong>已验收 PNG 未进成片</strong>，编辑器重排为 <strong>U B A I</strong> 空格字 + 贴纸飞机，破坏 typographic pun。
+    </div>
+  </section>
+
+  <section>
+    <h2>用户要求 vs V1 实际</h2>
+    <table class="compare-table">
+      <thead><tr><th>维度</th><th>用户要求</th><th>V1 实际</th></tr></thead>
+      <tbody>
+        <tr><td>风格</td><td class="ok">未指定（仅动效）</td><td class="bad">Agent 自定深蓝 MG + 金 D</td></tr>
+        <tr><td>文案</td><td class="ok">整句 Going to Ubaid</td><td class="bad">Going to + U B A I + D</td></tr>
+        <tr><td>D 动效</td><td class="ok">Ubaid 内 D 前移</td><td class="bad">独立 D 层位移</td></tr>
+        <tr><td>飞机</td><td class="ok">穿过字母</td><td class="bad">flat icon overlay 横扫</td></tr>
+        <tr><td>Keyframe</td><td class="ok">—</td><td class="bad">生成并验收但未使用</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>问题与解决办法</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="p-title">P0 — 风格未经确认</div>
+        <div class="p-cause">原因：Format「ok」被当成 Style 确认</div>
+        <div class="p-fix">办法：Style Gate 独立；交付前 1 张 mood / 沿用已批 keyframe</div>
+      </div>
+      <div class="problem-card">
+        <div class="p-title">P0 — Keyframe 未进成片</div>
+        <div class="p-cause">原因：先 image_generate 后改 editor text</div>
+        <div class="p-fix">办法：PNG 为唯一视觉标准，或不要生成 PNG</div>
+      </div>
+      <div class="problem-card p2">
+        <div class="p-title">P0 — 字谜编排错误</div>
+        <div class="p-cause">原因：edit_spec 拆 3 个 text track</div>
+        <div class="p-fix">办法：整词 Ubaid + D 子串 anim；禁 U B A I</div>
+      </div>
+      <div class="problem-card p2">
+        <div class="p-title">P0 — 飞机非穿字</div>
+        <div class="p-cause">原因：plane_icon flat + overlay</div>
+        <div class="p-fix">办法：mask/matte 与字同层合成</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>推荐重做产线</h2>
+    <div class="pipeline">
+      <ol>
+        <li>澄清动效 + <strong>确认视觉风格</strong>（与 Format 分开）</li>
+        <li>script-skill：Beat1 整句 → Beat2 D 前移 → Beat3 飞机穿字（同 compositing）</li>
+        <li>生产二选一：<strong>A)</strong> 已批 PNG 为底 + anim D/plane；<strong>B)</strong> 纯 editor 但对齐 script</li>
+        <li>禁止 flat icon 横扫；禁止两套 typography</li>
+        <li>show_final_video</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>调用时序（V1 真实路径 · trace-3）</h2>
+    <div class="timeline">
+      <div class="tl-item warn"><div class="tl-head"><div class="tl-time">21:04:49</div><div class="tl-tool">image_generate ×3</div></div><div class="tl-body">frame_going_to_ubaid, frame_dubai_text, plane_icon — dark navy prompts</div></div>
+      <div class="tl-item success"><div class="tl-head"><div class="tl-time">21:06:17</div><div class="tl-tool">analyze_file_content ×3</div></div><div class="tl-body">PNG 验收通过</div></div>
+      <div class="tl-item error"><div class="tl-head"><div class="tl-time">21:06:50</div><div class="tl-tool">execute_edit_video</div></div><div class="tl-body">#0a1628 + Montserrat「Going to」「U B A I」「D」+ plane_icon overlay — 未用前两帧 PNG</div></div>
+      <div class="tl-item success"><div class="tl-head"><div class="tl-time">21:08:34</div><div class="tl-tool">show_final_video</div></div><div class="tl-body">ubaid_to_dubai_animation.mp4 (14s)</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>失败因果链</h2>
+    <pre class="chain">用户只描述动效 → Agent 单方面 dark navy/gold MG
+→ 用户「ok」= 仅 16:9 时长
+→ keyframe PNG 验收后废弃
+→ 成片「U B A I」+ 贴纸飞机
+→ Wrong visual style</pre>
+  </section>
+
+  <section>
+    <h2>素材与 Prompt（V1）</h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <div style="height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;">PNG 未下载 · 见 trace</div>
+        <div class="media-info">
+          <div class="media-name">frame_going_to_ubaid <div class="badge unused">未进成片</div></div>
+          <div class="media-meta">fal / gpt-image-2 / text2image</div>
+          <details><summary>View prompt</summary><pre>Clean dark navy blue background, centered white bold text reading exactly: 'Going to Ubaid' — large modern sans-serif font, crisp white letters, no decorations, minimal design, cinematic typography, high contrast</pre></details>
+        </div>
+      </div>
+      <div class="media-card">
+        <div style="height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;">PNG 未下载 · 见 trace</div>
+        <div class="media-info">
+          <div class="media-name">frame_dubai_text <div class="badge unused">未进成片</div></div>
+          <div class="media-meta">fal / gpt-image-2 / text2image</div>
+          <details><summary>View prompt</summary><pre>Clean dark navy blue background, centered large bold white text reading exactly: 'DUBAI' — very large modern sans-serif font...</pre></details>
+        </div>
+      </div>
+      <div class="media-card">
+        <div style="height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;">PNG 未下载 · 见 trace</div>
+        <div class="media-info">
+          <div class="media-name">plane_icon <div class="badge used">V1 使用</div></div>
+          <div class="media-meta">fal / gpt-image-2 — flat silhouette</div>
+          <details><summary>View prompt</summary><pre>A white commercial airplane silhouette... clean minimal flat design... pure black background for easy masking</pre></details>
+        </div>
+      </div>
+      <div class="media-card">
+        <video src="media/plane_flying_scene_20260518T211533_4a2b14c9.mp4" controls muted playsinline></video>
+        <div class="media-info">
+          <div class="media-name">plane_flying_scene <div class="badge unused">V2 only</div></div>
+          <div class="media-meta">seedance · reference2video（无 image_list）· sound on</div>
+          <details><summary>View prompt</summary><pre>Cinematic realistic shot of a large commercial airplane flying through clear blue sky...</pre></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>文件索引</h2>
+    <div class="file-index">
+      <div><code>analysis/case-19598599427-v1-wrong-visual-style.md</code> — 完整分析报告</div>
+      <div><code>analysis/langfuse-data/cases/19598599427/trace-3-f8e08738.json</code> — V1 主 trace</div>
+      <div><code>analysis/langfuse-data/cases/19598599427/trace-1-a171f5b9.json</code> — 用户需求</div>
+      <div><code>analysis/langfuse-data/cases/19598599427/assets-with-prompts.json</code> — 素材 prompt 映射</div>
+      <div><code>analysis/langfuse-data/cases/19598599427/trace-*.json</code> — 全 6 条 Langfuse traces</div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

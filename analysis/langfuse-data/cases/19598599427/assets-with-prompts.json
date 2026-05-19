@@ -1,0 +1,56 @@
+[
+  {
+    "type": "image",
+    "name": "frame_going_to_ubaid",
+    "provider": "fal",
+    "model": "openai/gpt-image-2",
+    "mode": "text2image",
+    "prompt": "Clean dark navy blue background, centered white bold text reading exactly: 'Going to Ubaid' — large modern sans-serif font, crisp white letters, no decorations, minimal design, cinematic typography, high contrast",
+    "used_in_final_v1": false,
+    "trace_file": "trace-3-f8e08738.json",
+    "note": "Generated and approved but NOT used in execute_edit_video"
+  },
+  {
+    "type": "image",
+    "name": "frame_dubai_text",
+    "provider": "fal",
+    "model": "openai/gpt-image-2",
+    "mode": "text2image",
+    "prompt": "Clean dark navy blue background, centered large bold white text reading exactly: 'DUBAI' — very large modern sans-serif font, crisp white letters, all caps, no decorations, minimal cinematic typography, high contrast, the letters are evenly spaced and centered perfectly",
+    "used_in_final_v1": false,
+    "trace_file": "trace-3-f8e08738.json"
+  },
+  {
+    "type": "image",
+    "name": "plane_icon",
+    "provider": "fal",
+    "model": "openai/gpt-image-2",
+    "mode": "text2image",
+    "prompt": "A white commercial airplane silhouette flying from left to right, side profile view, clean minimal flat design, no background (pure black background for easy masking), sharp clean white aircraft shape with visible wings and tail, elegant and simple",
+    "used_in_final_v1": true,
+    "trace_file": "trace-3-f8e08738.json",
+    "note": "Overlay sweep — wrong style for 'cross the letter'"
+  },
+  {
+    "type": "final",
+    "name": "ubaid_to_dubai_animation",
+    "file_path": "/projects/19598599427/workspace/assets/ubaid_to_dubai_animation.mp4",
+    "duration_s": 14,
+    "resolution": "1920x1080",
+    "style": "editor: #0a1628 + Montserrat text layers + plane_icon overlay",
+    "trace_file": "trace-3-f8e08738.json"
+  },
+  {
+    "type": "video",
+    "name": "plane_flying_scene",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "prompt": "Cinematic realistic shot of a large commercial airplane flying through clear blue sky with a few white clouds, beautiful golden hour lighting, dramatic aerial perspective, the plane flies from left to right across the frame filling most of the screen, camera tracks alongside the plane, realistic and stunning, high quality",
+    "sound": "on",
+    "duration": "6",
+    "references": [],
+    "trace_file": "trace-5-031b5b6c.json",
+    "note": "V2 only — analyze flagged as CGI not real footage"
+  }
+]
