@@ -1,0 +1,61 @@
+[
+  {
+    "type": "video",
+    "name": "seq1_presenter",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "10",
+    "audio_list": null,
+    "prompt": "Use image 1 as the character reference. A young male professional in his late 20s, casual business attire, sitting by a floor-to-ceiling glass window in a modern co-working space. Medium shot, slightly angled. [0-4s] He looks directly at camera with a natural, confident expression, speaking candidly: \"以前开完会，我要花半小时整理跟进事项，还经常漏掉。\" Subtle hand gesture as he speaks. [4-8s] A brief thoughtful pause, then continues speaking with a slight smile: \"用了这款协作App之后，所有会议记录、任务分配、进度更新，全在一个地方。\" [8-10s] He nods slightly and smiles, concluding his thought. Natural left-side warm golden window light, shallow depth of field, soft bokeh background. Cinematic film grain, warm golden color grade. No logos on clothing. SFX: soft co-working office ambient sound, gentle keyboard taps in background, natural room tone. No background music.",
+    "references": [
+      "character_ref"
+    ]
+  },
+  {
+    "type": "video",
+    "name": "seq2_broll_tablet",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "10",
+    "audio_list": null,
+    "prompt": "Use image 1 as the character reference. A young male professional in casual business attire, sitting at a modern co-working desk. [0-5s] Close-up to medium shot of his hands and face as he annotates a project on a tablet with quick confident gestures, swiping and tapping. His focused expression visible, slight forward lean. Shallow depth of field, background is softly blurred co-working space. [5-10s] Slow pull-back to reveal him reviewing completed task lists on the tablet screen, subtle satisfied nod. Warm side window light from left, golden warm tones, cinematic color grade, no speech no dialogue no voice no spoken words, no background music, SFX: soft tablet tap sounds, light paper rustle, gentle ambient office hum.",
+    "references": [
+      "character_ref"
+    ]
+  },
+  {
+    "type": "video",
+    "name": "seq3_broll_videocall",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "10",
+    "audio_list": null,
+    "prompt": "Use image 1 as the character reference. A young male professional in casual business attire, in a modern co-working space. [0-4s] Medium shot of him on a video call, laptop open, small team faces visible in the screen. He nods attentively and gives a thumbs up gesture, collaborative body language, slight smile. Warm golden natural side light, cinematic shallow depth of field. [4-8s] Cut to over-the-shoulder angle, showing the laptop screen with team in video conference grid, he leans forward slightly making a point with relaxed confidence. [8-10s] He leans back, smiles warmly and closes laptop slightly — a sense of productive wrap-up. Warm golden tones, film grain, no speech no dialogue no voice no spoken words, no background music. SFX: soft laptop keyboard sound, faint video call notification chime, gentle ambient co-working background hum.",
+    "references": [
+      "character_ref"
+    ]
+  },
+  {
+    "type": "voiceover",
+    "name": "voiceover_main",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "siqi_liu",
+    "text": "以前开完会，我要花半小时整理跟进事项，还经常漏掉。[sighs] 用了这款协作App之后，所有会议记录、任务分配、进度更新，全在一个地方。团队沟通快了，会议少了，但效率翻了一倍不止。[pause] 现在我最喜欢的状态，就是这样——专注做事，轻松收场。",
+    "language_code": "zh"
+  },
+  {
+    "type": "music",
+    "name": "bgm_acoustic",
+    "provider": "elevenlabs",
+    "model": "music_v1",
+    "prompt": "Warm acoustic guitar, fingerpicking style, gentle and unhurried tempo around 70 BPM. Light and airy feel, slightly jazzy chord progressions. Soft background office ambience undertone. No drums, no strong percussion. Intimate and modern, like background music in a coffee shop or co-working space. Warm golden emotional tone, non-intrusive, supporting a narrator voice without competing.",
+    "duration_ms": 35000
+  }
+]

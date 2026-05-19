@@ -1,0 +1,99 @@
+[
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "336b8dd50af2cac6",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq3",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "4fd67f2bda49f84f",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_broll_videocall",
+    "type": "video"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "60135bff498f165f",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic",
+    "type": "audio"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "59562877555f8e4f",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq2",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "96037aa3faafde53",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq1",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "f9b741a442b670e0",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/26513781249/workspace/assets/final_explainer_30s.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "0e9eab0ef281a014",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_broll_tablet",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "f9297d8a53ea23ca",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_presenter",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "980e164d4576d7af",
+    "prompt": "以前开完会，我要花半小时整理跟进事项，还经常漏掉。[sighs] 用了这款协作App之后，所有会议记录、任务分配、进度更新，全在一个地方。团队沟通快了，会议少了，但效率翻了一倍不止。[pause] 现在我最喜欢的状态，就是这样——专注做事，轻松收场。",
+    "model": "eleven_v3",
+    "name": "voiceover_main",
+    "type": "audio",
+    "voice_id": "siqi_liu"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-0ccb6a0b.json",
+    "observation_id": "169b4a154b6068dc",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "character_ref",
+    "type": "image"
+  }
+]
