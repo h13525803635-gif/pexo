@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>Case 73077293918</title>
+  <style>
+    body{font-family:system-ui,sans-serif;background:#0d1117;color:#c9d1d9;margin:0;padding:24px;line-height:1.6}
+    h1{color:#58a6ff} h2{color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:8px}
+    .callout{background:#161b22;border-left:3px solid #f85149;padding:14px 18px;margin:16px 0}
+    table{width:100%;border-collapse:collapse;background:#161b22;font-size:13px}
+    th,td{padding:10px 14px;border-bottom:1px solid #30363d;text-align:left}
+    th{background:#21262d;color:#8b949e}
+    .bad{color:#f85149}.ok{color:#3fb950}.warn{color:#d29922}
+    pre{background:#161b22;padding:16px;border-radius:8px;font-size:12px;overflow:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .card{background:#161b22;border:1px solid #30363d;border-radius:10px;overflow:hidden}
+    .card video,.card audio{width:100%;display:block;background:#000}
+    .card .info{padding:12px;font-size:12px}
+    a{color:#58a6ff}
+  </style>
+</head>
+<body>
+  <h1>73077293918 — 音频重叠（含 L2 英文叠音）</h1>
+  <p style="color:#8b949e">Langfuse trace 32880e9f · 2026-05-19</p>
+  <div class="callout"><strong>L2 英文重叠：</strong>S3 手机 B-roll 内嵌 Seedance 英文 co-gen（STT 96.6%），合成时 volume 0.35 与中文 vo_seg2 同播。Agent 误判 STT 为环境音杂音。</div>
+  <h2>STT 审计</h2>
+  <table>
+    <tr><th>片段</th><th>STT</th><th>判定</th></tr>
+    <tr><td>S2 手表</td><td>[birds chirping]</td><td class="ok">正常</td></tr>
+    <tr><td>S3 手机</td><td>So this is Altman who be a...</td><td class="bad">L2 英文重叠源</td></tr>
+    <tr><td>S4 v1</td><td>So listen to your body...</td><td class="bad">已重拍 v2</td></tr>
+  </table>
+  <h2>时间轴</h2>
+  <pre>S1  0-9.06s    内嵌中文 L1
+S2  9.06-14.12s 环境音 + 中文 L2 OK
+S3  14.12-19.18s 环境音 + 英文 + 中文 L2 OVERLAP
+S4  19.18-27.24s 中文 L3 + BGM
+切点: vo_seg2 至 19256ms, vo_seg4 自 19180ms → 76ms 双旁白</pre>
+  <h2>素材</h2>
+  <div class="grid">
+    <div class="card"><video controls src="media/s3_broll_phone_20260519T104312_8ed520f2.mp4"></video><div class="info">s3 — L2 英文源</div></div>
+    <div class="card"><video controls src="media/s2_broll_watch_20260519T104257_717f6f70.mp4"></video><div class="info">s2 — 正常</div></div>
+    <div class="card"><video controls src="media/s1_open_talk_20260519T104308_d44c0dc1.mp4"></video><div class="info">s1 — L1</div></div>
+  </div>
+  <p><a href="../../73077293918_audio-overlap-root-cause.md">完整根因报告</a></p>
+</body>
+</html>
