@@ -1,0 +1,16 @@
+[
+  {
+    "type": "video",
+    "name": "drywall_ceiling_trick",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "prompt": "Cinematic photorealistic look, warm natural interior lighting, slightly dusty construction atmosphere, clean digital texture. A young woman with blonde hair (some red-tipped ends), blue eyes, star tattoos on her upper chest, wearing a black tank top and work clothes is doing drywall ceiling work alone in an unfinished room with exposed wood studs on walls and ceiling. [0-4s] Medium shot: she holds an electric drill and drives screws to attach a short cut piece of 2x4 lumber to the vertical wall stud, positioning it close to the ceiling so there's just a small gap — just enough to slide a piece of drywall into — the 2x4 acts as a ledge bracket. SFX: electric drill whirring and screws driving into wood, light wood creaking. [4-8s] Wide-to-medium shot: she picks up a cut drywall sheet and slides one end of it horizontally into the gap between the wall-mounted 2x4 block and the ceiling, so the block holds that end up while she lifts the other end. SFX: drywall sheet sliding, soft scraping sound. [8-13s] Medium shot: with the drywall panel now resting on the 2x4 ledge and held up against the ceiling joists, she uses her electric drill with both hands freely to drive screws through the drywall up into the ceiling studs, securing it confidently by herself with no assistant. SFX: drill driving screws, satisfying mechanical clicks. [13-15s] She steps back and looks up at the freshly secured drywall ceiling panel with a satisfied, proud expression. SFX: quiet room ambience, soft exhale. No background music, no musical score.",
+    "sound": "on",
+    "duration": "15",
+    "references": [
+      "a_DAtMZsU_847.jpg",
+      "a_pYv8HAD_848.jpg"
+    ]
+  }
+]

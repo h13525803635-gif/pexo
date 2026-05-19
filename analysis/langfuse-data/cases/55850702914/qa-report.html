@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 55850702914 — 工序视频木托未装、电钻空转</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #c9d1d9; --text-dim: #8b949e;
+      --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+      --orange: #d29922; --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; line-height: 1.8; }
+    .header .case-id { font-family: monospace; color: var(--accent); font-size: 13px; margin-top: 4px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .value { font-size: 28px; font-weight: 700; }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.orange { color: var(--orange); }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    section { margin-bottom: 56px; }
+    section > h2 { font-size: 20px; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; }
+    .callout { background: var(--surface); border-left: 3px solid var(--red); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px; font-size: 13px; line-height: 1.7; }
+    .callout strong { color: var(--accent); }
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+    .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+    .problem-card.p2::before { background: var(--orange); }
+    .problem-card .p-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+    .problem-card .p-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+    .problem-card code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .flow-chain { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+    .flow-step { font-size: 12px; padding: 8px 12px; border-radius: 6px; background: var(--surface2); border-left: 3px solid var(--red); }
+    .flow-step.fix { border-left-color: var(--green); }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .tl-item { position: relative; margin-bottom: 14px; }
+    .tl-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .tl-item.error::before { border-color: var(--red); background: rgba(248,81,73,0.3); }
+    .tl-item.warn::before { border-color: var(--orange); background: rgba(210,153,34,0.3); }
+    .tl-item .tl-body { font-size: 13px; color: var(--text-dim); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .compare-table th, .compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--surface2); color: var(--text-dim); font-size: 12px; }
+    .compare-table .bad { color: var(--red); }
+    .compare-table .ok { color: var(--green); }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .media-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .media-card video, .media-card img { width: 100%; max-height: 360px; background: #000; display: block; object-fit: contain; }
+    .media-card .placeholder { width: 100%; height: 180px; background: var(--surface2); display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 12px; }
+    .media-card .media-info { padding: 12px 14px; font-size: 12px; }
+    .media-card .media-name { font-weight: 600; margin-bottom: 4px; }
+    .media-card .media-meta { color: var(--text-dim); margin-bottom: 6px; }
+    .media-card details summary { cursor: pointer; color: var(--accent); font-size: 12px; }
+    .media-card pre { font-size: 11px; line-height: 1.5; white-space: pre-wrap; margin-top: 8px; padding: 10px; background: var(--surface2); border-radius: 6px; max-height: 220px; overflow-y: auto; }
+    .mod-list { display: flex; flex-direction: column; gap: 12px; }
+    .mod-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; font-size: 13px; }
+    .mod-card strong { color: var(--accent); }
+    .file-index { font-size: 13px; color: var(--text-dim); line-height: 2; }
+    .file-index code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>Solo Drywall Ceiling Trick — 工序失真分析</h1>
+    <p class="subtitle">用户反馈：未展示安装木托条；电钻明显没有在真正干活</p>
+    <p class="case-id">Case ID: 55850702914 · 2026-05-19 · 7 Langfuse traces</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">严重问题</div><div class="value red">P1</div><div class="desc">工序/机械动作</div></div>
+    <div class="stat-card"><div class="label">生成策略</div><div class="value orange">1×15s</div><div class="desc">单条 monolithic</div></div>
+    <div class="stat-card"><div class="label">参考图</div><div class="value red">仅自拍</div><div class="desc">无场景/道具</div></div>
+    <div class="stat-card"><div class="label">模型</div><div class="value accent">Seedance</div><div class="desc">reference2video</div></div>
+  </div>
+
+  <section>
+    <h2>核心结论</h2>
+    <div class="callout">
+      <strong>根因：</strong> Agent 将 4 步因果工序（装 2×4 → 滑入石膏板 → 拧天花 → 收尾）压进 <strong>一条 15 秒</strong> Seedance 生成，且 <code>image_list</code> 仅含人物自拍。Prompt 在 <code>[4-8s]</code> 假设「木条已装好」，但模型常无法在 <code>[0-4s]</code> 建立可验证的安装过程 → 表现为木托缺失、电钻空转。
+    </div>
+  </section>
+
+  <section>
+    <h2>问题卡片</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="p-title">P1 — 未展示安装木托 + 电钻假动作</div>
+        <div class="p-desc">
+          单次 <code>drywall_ceiling_trick</code> · 15s · <code>reference2video</code>。<br>
+          用户要的是可跟学的 <strong>安装过程</strong>，交付描述却是 “full trick in one clean shot”。
+        </div>
+        <div class="flow-chain">
+          <div class="flow-step">单条 15s 四步压缩 → 前段工序被跳过或虚化</div>
+          <div class="flow-step">参考图仅人脸 → 模型优先锁外貌，不锁工具/木条</div>
+          <div class="flow-step fix">修复：4 段独立生成 + 场景/「木条已装」keyframe + seg01 特写 QC</div>
+        </div>
+      </div>
+      <div class="problem-card p2">
+        <div class="p-title">P2 — 流程跳过 script / subject-asset</div>
+        <div class="p-desc">
+          读了 generation-skill 但未走完整分镜与参考资产规划；无生成后工序级检查（钻头接触、木条是否在墙上）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>生成参数 vs 应有策略</h2>
+    <table class="compare-table">
+      <thead><tr><th>维度</th><th>实际</th><th>应有</th></tr></thead>
+      <tbody>
+        <tr><td>片段数</td><td class="bad">1 × 15s</td><td class="ok">4 × 5–8s + assembly</td></tr>
+        <tr><td>参考图</td><td class="bad">2 张自拍</td><td class="ok">场景 + 木条安装态 + 人物</td></tr>
+        <tr><td>seg01 镜头</td><td class="bad">Medium，泛化 “drives screws”</td><td class="ok">Close-up：钻头贴木、螺丝入 stud</td></tr>
+        <tr><td>QC</td><td class="bad">无工序检查即交付</td><td class="ok">seg01 帧检：木条固定 + 钻头接触</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>迭代时间线</h2>
+    <div class="timeline">
+      <div class="tl-item error">
+        <div class="tl-body"><strong>v1</strong> — 用户上传自拍 + 描述 solo drywall 技巧 → 单次 video_generate 15s → 交付</div>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-body"><strong>v1.1</strong> — 用户问能否更长视频；Agent 建议分段，但未对 drywall 重生成</div>
+      </div>
+      <div class="tl-item error">
+        <div class="tl-body"><strong>反馈</strong> — 未展示装木条；电钻未真实工作（本报告根因分析）</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>建议 Skill 修改</h2>
+    <div class="mod-list">
+      <div class="mod-card"><strong>generation-skill</strong> — 工序/教程类（install→use、tool→material）<strong>禁止</strong> single-call 15s；每关键步骤独立 sequence；扩展 post-gen sanity（工具接触、关键道具可见）。</div>
+      <div class="mod-card"><strong>script-skill</strong> — 含机械因果链的 brief 必须输出 per-step sequence + 每步 start/end 状态描述。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>素材库</h2>
+    <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:12px;">参考图</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="media/847.jpg" alt="character ref 847" />
+        <div class="media-info">
+          <div class="media-name">a_DAtMZsU_847.jpg</div>
+          <div class="media-meta">character_ref · 车内自拍</div>
+        </div>
+      </div>
+      <div class="media-card">
+        <img src="media/848.jpg" alt="character ref 848" />
+        <div class="media-info">
+          <div class="media-name">a_pYv8HAD_848.jpg</div>
+          <div class="media-meta">character_ref · 室内自拍</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;color:var(--text-dim);margin:20px 0 12px;">视频片段</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <div class="placeholder">视频未下载至本地（workspace 路径仅 trace 内）</div>
+        <div class="media-info">
+          <div class="media-name">drywall_ceiling_trick</div>
+          <div class="media-meta">seedance · doubao-seedance-2-0-260128 · reference2video · 15s · sound on</div>
+          <div class="media-meta">Refs: 847.jpg, 848.jpg</div>
+          <details>
+            <summary>View prompt</summary>
+            <pre>Cinematic photorealistic look, warm natural interior lighting, slightly dusty construction atmosphere, clean digital texture. A young woman with blonde hair (some red-tipped ends), blue eyes, star tattoos on her upper chest, wearing a black tank top and work clothes is doing drywall ceiling work alone in an unfinished room with exposed wood studs on walls and ceiling. [0-4s] Medium shot: she holds an electric drill and drives screws to attach a short cut piece of 2x4 lumber to the vertical wall stud, positioning it close to the ceiling so there's just a small gap — just enough to slide a piece of drywall into — the 2x4 acts as a ledge bracket. SFX: electric drill whirring and screws driving into wood, light wood creaking. [4-8s] Wide-to-medium shot: she picks up a cut drywall sheet and slides one end of it horizontally into the gap between the wall-mounted 2x4 block and the ceiling, so the block holds that end up while she lifts the other end. SFX: drywall sheet sliding, soft scraping sound. [8-13s] Medium shot: with the drywall panel now resting on the 2x4 ledge and held up against the ceiling joists, she uses her electric drill with both hands freely to drive screws through the drywall up into the ceiling studs, securing it confidently by herself with no assistant. SFX: drill driving screws, satisfying mechanical clicks. [13-15s] She steps back and looks up at the freshly secured drywall ceiling panel with a satisfied, proud expression. SFX: quiet room ambience, soft exhale. No background music, no musical score.</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>文件索引</h2>
+    <p class="file-index">
+      <code>analysis/55850702914_15s-procedural-drywall-fake-drill.md</code> — 完整书面分析<br>
+      <code>analysis/langfuse-data/cases/55850702914/trace-3-1ae82d4c.json</code> — 主生成 trace<br>
+      <code>analysis/langfuse-data/cases/55850702914/assets-with-prompts.json</code> — 素材与 prompt 映射
+    </p>
+  </section>
+</div>
+</body>
+</html>

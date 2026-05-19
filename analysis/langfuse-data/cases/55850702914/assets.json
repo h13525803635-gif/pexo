@@ -1,0 +1,210 @@
+[
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-3-1ae82d4c.json",
+    "observation_id": "3fd64150266e7373",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/55850702914/workspace/assets/drywall_ceiling_trick_20260519T071848_e42a9062.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-3-1ae82d4c.json",
+    "observation_id": "76574fe782dcb50c",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "drywall_ceiling_trick",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "748b9fb960ab1b93",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg05",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "1caac19772013299",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg09",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "21b45d639f6591fc",
+    "prompt": "There's a camera network silently recording your license plate every time you drive past it. You probably had no idea it was there.",
+    "model": "eleven_v3",
+    "name": "flock_vo_01",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "3e32102da77489a3",
+    "prompt": "So we want to know — are you okay with being tracked every single time you leave your driveway? Drop your thoughts in the comments.",
+    "model": "eleven_v3",
+    "name": "flock_vo_09",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "41f014f7ea0125a9",
+    "prompt": "There is no federal law requiring a warrant to access this data. No opt-out. No notification that you have been scanned. No way to know who is watching.",
+    "model": "eleven_v3",
+    "name": "flock_vo_08",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "52d1fbe4d277ec08",
+    "prompt": "That data is stored for up to 30 days — sometimes longer — and can be searched in seconds. Every road you take, every place you visit, every time you left your house.",
+    "model": "eleven_v3",
+    "name": "flock_vo_06",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "73c82844ce257ead",
+    "prompt": "Right now, Flock cameras are deployed in over 5,000 cities and towns across America — on neighborhood streets, at highway on-ramps, in parking lots, and outside schools.",
+    "model": "eleven_v3",
+    "name": "flock_vo_04",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "78ffc482c18fd7e1",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg06",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "7fb4087647bb4f42",
+    "prompt": "Each camera logs your plate number, the time, your location, and the direction you were traveling — building a detailed map of your movements over time.",
+    "model": "eleven_v3",
+    "name": "flock_vo_03",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "88f44bbd683ec16a",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "flock_bgm",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "8a75c98cf0b564c8",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg02",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "92994d7888cba5af",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg04",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "ab6c5418e12d92be",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg07",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "b18d3f8ffd5c012c",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg01",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "ba3d527e4e1ee185",
+    "prompt": "Law enforcement agencies, homeowners associations, and private businesses can all access the data. Some departments have access to networks spanning entire states.",
+    "model": "eleven_v3",
+    "name": "flock_vo_05",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "c8b6469bd4894bfd",
+    "prompt": "Civil liberties groups warn that mass license plate surveillance creates a de facto tracking system for law-abiding citizens who have done nothing wrong.",
+    "model": "eleven_v3",
+    "name": "flock_vo_07",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "d797377121d170f6",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg03",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "e2c11fe39f8a3d2a",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "flock_seg08",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-7-6c0bb428.json",
+    "observation_id": "ec914b76d97a49d4",
+    "prompt": "These are Flock Safety cameras. Automated license plate readers, or ALPRs, that photograph every vehicle that passes them, 24 hours a day, 7 days a week.",
+    "model": "eleven_v3",
+    "name": "flock_vo_02",
+    "type": "audio",
+    "voice_id": "pqHfZKP75CvOlQylNhV4"
+  }
+]
