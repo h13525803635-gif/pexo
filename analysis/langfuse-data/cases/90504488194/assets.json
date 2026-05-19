@@ -1,0 +1,78 @@
+[
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "037ca300b0e9ad37",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq_a_doorway",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "980b75df60244c71",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/90504488194/workspace/assets/bookstore_short_film_30s.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "65a0bf515a504982",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq_b_bookspines",
+    "type": "video"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "6a6672502a6f9cc6",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "scene_ref_bookstore",
+    "type": "image"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "87e02d4e737a4d61",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq_c_exit_alley",
+    "type": "video"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "d58cafeb04b1c535",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "char_ref_trenchcoat",
+    "type": "image"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "e39d459db88a7687",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic_guitar",
+    "type": "audio"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-29c2edd1.json",
+    "observation_id": "f80071d848a1e2db",
+    "prompt": "我也说不清楚，可能就是那种味道——旧书、灰尘、还有某一年某个人划下的痕迹。[sighs] 每个周末我来这条街，不是为了买书，是为了想起自己，还有很多事，想做。",
+    "model": "eleven_v3",
+    "name": "vo_narration",
+    "type": "audio",
+    "voice_id": "5qr5FEpvZGzmVOPBS55W"
+  }
+]
