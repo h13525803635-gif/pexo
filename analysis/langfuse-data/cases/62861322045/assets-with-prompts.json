@@ -1,0 +1,84 @@
+[
+  {
+    "type": "image",
+    "name": "cafe_presenter_ref",
+    "provider": "seedream",
+    "model": "seedream-4-5-251128",
+    "prompt": "A young Asian man in his late 20s, wearing casual business attire, a light beige linen shirt slightly open at the collar, sitting at a modern coffee shop. He has short neatly styled black hair, warm friendly eyes, a natural relaxed smile. He is looking directly at the camera in a medium-close shot, chest up visible. The background shows a softly blurred cafe interior with warm ambient lighting, wooden tables, exposed brick, green plants, bokeh cafe patrons. Cinematic shallow depth of field, warm golden-tone natural window light falling on his face from the left, soft film-like texture, photorealistic, editorial portrait quality. No logos, no branded items.",
+    "references": []
+  },
+  {
+    "type": "voiceover",
+    "name": "vo_seg1",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY",
+    "prompt": "以前我每天要花两三个小时，在各种平台之间切来切去。自从用了这款App，一切都不一样了。",
+    "duration": "8.96"
+  },
+  {
+    "type": "voiceover",
+    "name": "vo_seg2",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY",
+    "prompt": "现在打开App，任务自动整理好，轻松点击就能完成。",
+    "duration": "5.44"
+  },
+  {
+    "type": "voiceover",
+    "name": "vo_seg3",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY",
+    "prompt": "节省下来的时间，我用来做真正重要的事。",
+    "duration": "3.6"
+  },
+  {
+    "type": "video",
+    "name": "seq1_presenter",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "sound": "on",
+    "duration": "10",
+    "spoken_lineage": "audio_list_tts",
+    "prompt": "A young Asian man in his late 20s, casual business attire with a light beige linen shirt, short neatly styled black hair, sitting at a wooden table in a modern coffee shop. He looks directly at the camera with a warm, natural expression. He is performing a monologue in Mandarin Chinese, lip-syncing naturally to the supplied audio. Medium-close shot, chest-up framing. Warm golden window light from the left. Soft-focus café background with bokeh patrons, wooden shelves, green plants. Cinematic shallow depth of field, film-like grain texture, warm amber color grading. Subtle natural ambient café sounds, no background music.",
+    "references": ["cafe_presenter_ref.png"],
+    "audio_list": ["vo_seg1.mp3"]
+  },
+  {
+    "type": "video",
+    "name": "seq2_broll_typing",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "sound": "on",
+    "duration": "10",
+    "spoken_lineage": "co-gen_ambient_only",
+    "prompt": "Close-up cinematic B-roll shot: a young Asian man's hands typing confidently on a slim silver laptop keyboard on a wooden café table. The screen glows softly showing an app interface. Coffee cup with latte art sits nearby. Warm natural window light, shallow depth of field, the background beautifully blurred into warm amber bokeh. Camera slowly pushes in. Organic film-like grain, warm golden color grading. Subtle café ambient sounds — gentle background chatter, espresso machine — no music, no speech, no dialogue.",
+    "references": []
+  },
+  {
+    "type": "video",
+    "name": "seq3_broll_phone",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "sound": "on",
+    "duration": "10",
+    "spoken_lineage": "co-gen_ambient_only",
+    "prompt": "Cinematic B-roll sequence in a modern coffee shop. First: close-up of a young Asian man's hand tapping a smartphone screen, showing a clean app interface, warm light from above, shallow depth of field. Then: the camera slowly pulls back to reveal the young man looking at his phone with a satisfied, relaxed smile. He's wearing a light beige linen shirt, sitting by a café window with warm afternoon light streaming in. Warm golden amber tones, film-like texture, soft bokeh background with plants and wooden shelves. Gentle café ambient sounds — no music, no speech, no dialogue.",
+    "references": []
+  },
+  {
+    "type": "music",
+    "name": "bgm_acoustic",
+    "provider": "elevenlabs",
+    "model": "music_v1",
+    "prompt": "Gentle acoustic guitar melody, warm and light, coffee shop morning vibe. Fingerpicking style, soft and unhurried, positive and uplifting without being upbeat. Intimate and personal feel, like background music in a cozy cafe. No percussion, no bass, no synth.",
+    "duration": "32.08"
+  },
+  {
+    "type": "final",
+    "name": "final_assembly_v1",
+    "prompt": "3×10s clips + vo_seg2/3 overlay; seq1 embedded speech vol 0.9; BGM vol 0.12"
+  }
+]

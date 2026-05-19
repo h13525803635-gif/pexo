@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 62861322045 — 三段音色不一致 + 人物漂移</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #c9d1d9; --text-dim: #8b949e;
+      --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+      --orange: #d29922; --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; line-height: 1.8; max-width: 720px; margin: 0 auto; }
+    .header .case-id { font-family: monospace; color: var(--accent); font-size: 13px; margin-top: 8px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .value { font-size: 28px; font-weight: 700; }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.orange { color: var(--orange); }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    section { margin-bottom: 56px; }
+    section > h2 { font-size: 20px; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; }
+    .callout { background: var(--surface); border-left: 3px solid var(--red); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px; font-size: 13px; line-height: 1.7; }
+    .callout strong { color: var(--accent); }
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+    .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+    .problem-card .p-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+    .problem-card .p-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+    .problem-card code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .flow-chain { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+    .flow-step { font-size: 12px; padding: 8px 12px; border-radius: 6px; background: var(--surface2); border-left: 3px solid var(--red); }
+    .flow-step.fix { border-left-color: var(--green); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+    .compare-table th, .compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--surface2); color: var(--text-dim); font-size: 12px; }
+    .compare-table .bad { color: var(--red); }
+    .compare-table .ok { color: var(--green); }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .media-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .media-card video, .media-card audio { width: 100%; max-height: 360px; background: #000; display: block; object-fit: contain; }
+    .media-card audio { max-height: 48px; padding: 8px; background: var(--surface2); }
+    .media-card .media-info { padding: 12px 14px; font-size: 12px; }
+    .media-card .media-name { font-weight: 600; margin-bottom: 4px; }
+    .media-card .media-meta { color: var(--text-dim); margin-bottom: 6px; }
+    .media-card details summary { cursor: pointer; color: var(--accent); font-size: 12px; }
+    .media-card pre { font-size: 11px; line-height: 1.5; white-space: pre-wrap; margin-top: 8px; padding: 10px; background: var(--surface2); border-radius: 6px; max-height: 200px; overflow-y: auto; }
+    .mod-list { display: flex; flex-direction: column; gap: 12px; }
+    .mod-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; font-size: 13px; line-height: 1.7; }
+    .mod-card strong { color: var(--accent); }
+    .file-index { font-size: 13px; color: var(--text-dim); line-height: 2; }
+    .file-index code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; margin-left: 6px; }
+    .tag.p0 { background: rgba(248,81,73,0.2); color: var(--red); }
+    .tag.p1 { background: rgba(210,153,34,0.2); color: var(--orange); }
+    h3.sub { font-size: 14px; color: var(--text-dim); margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>咖啡厅自述 App 片 — 音色 &amp; 人物一致性</h1>
+    <p class="subtitle">同一位年轻人对镜自述 + B-roll；旁白为角色第一人称。问题：三段旁白音色断裂；Seg3 露脸与 Seg1 不像同一人。</p>
+    <p class="case-id">Case ID: 62861322045 · 2026-05-19 · 1 Langfuse trace</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">P0 问题</div><div class="value red">2</div><div class="desc">音色管道 + 参考图</div></div>
+    <div class="stat-card"><div class="label">voice_id</div><div class="value accent">1</div><div class="desc">但 2 条交付管道</div></div>
+    <div class="stat-card"><div class="label">image_list</div><div class="value red">1/3</div><div class="desc">仅 Seg1 有 ref</div></div>
+    <div class="stat-card"><div class="label">Skill 改法</div><div class="value orange">5</div><div class="desc">文件待落地</div></div>
+  </div>
+
+  <section>
+    <h2>核心结论</h2>
+    <div class="callout">
+      <strong>音色：</strong> Seg1 用 <code>audio_list</code> 将 TTS 烘焙进 Seedance（成片 vol 0.9），Seg2/3 用外挂 <code>vo_seg2/3.mp3</code>（vol 1.0）。同一 voice_id 经两条管道 → 听感不一致。<br><br>
+      <strong>人物：</strong> 仅 <code>seq1_presenter</code> 传入 <code>cafe_presenter_ref</code>；Seg2/3 纯 prompt 并行生成 → 换脸。
+    </div>
+  </section>
+
+  <section>
+    <h2>问题卡片</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="p-title">P0 — 混合 spoken lineage</div>
+        <div class="p-desc">Seg1 <code>audio_list_tts</code> + Seg2/3 <code>post_tts_vo</code>；voice_id 相同但管道不同。</div>
+        <div class="flow-chain">
+          <div class="flow-step">Seg1: TTS 烘焙进 MP4</div>
+          <div class="flow-step">Seg2/3: 纯净 MP3 叠轨</div>
+          <div class="flow-step fix">Skill: unified_character_narration → 全片单一 lineage</div>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="p-title">P0 — 角色参考未贯穿</div>
+        <div class="p-desc">仅 Seg1 有 image_list；Seg3 pull-back 露脸无锚定。</div>
+        <div class="flow-chain">
+          <div class="flow-step fix">Skill: 同 character_id → 各段 image_list 一致</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>对比表</h2>
+    <table class="compare-table">
+      <thead><tr><th>段落</th><th>lineage</th><th>成片 VO</th><th>Skill 应有</th></tr></thead>
+      <tbody>
+        <tr><td>Seg1</td><td class="bad">audio_list_tts</td><td class="bad">嵌轨 0.9</td><td class="ok">统一 post_tts</td></tr>
+        <tr><td>Seg2</td><td class="bad">post_tts_vo</td><td class="ok">vo_seg2 1.0</td><td class="ok">统一 post_tts</td></tr>
+        <tr><td>Seg3</td><td class="bad">post_tts_vo</td><td class="ok">vo_seg3 1.0</td><td class="ok">统一 post_tts</td></tr>
+      </tbody>
+    </table>
+    <table class="compare-table">
+      <thead><tr><th>片段</th><th>image_list</th><th>露脸</th></tr></thead>
+      <tbody>
+        <tr><td>seq1</td><td class="ok">cafe_presenter_ref</td><td>是</td></tr>
+        <tr><td>seq2</td><td class="bad">空</td><td>手</td></tr>
+        <tr><td>seq3</td><td class="bad">空</td><td class="bad">结尾露脸</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Skill 层解决方案</h2>
+    <div class="mod-list">
+      <div class="mod-card"><strong>script-skill</strong> <span class="tag p1">P1</span> — narrator_mode + 分镜必填 refs / spoken_lineage。</div>
+      <div class="mod-card"><strong>voice-strategy-execution.md</strong> <span class="tag p0">P0</span> — 禁止 Seg1 audio_list + Seg2/3 post_tts。</div>
+      <div class="mod-card"><strong>generation-skill</strong> <span class="tag p0">P0</span> — 同 character 各段 image_list 一致。</div>
+      <div class="mod-card"><strong>vo-design-principles.md</strong> <span class="tag p0">P0</span> — 全部旁白只走 TTS MP3；LUFS 一致。</div>
+      <div class="mod-card"><strong>brainstorm-skill</strong> <span class="tag p1">P2</span> — same_character_narrator 标签。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>媒体画廊</h2>
+    <h3 class="sub">成片</h3>
+    <div class="media-grid" style="margin-bottom:24px">
+      <div class="media-card">
+        <video src="media/final_assembly_v1.mp4" controls playsinline></video>
+        <div class="media-info"><div class="media-name">final_assembly_v1</div><div class="media-meta">~29.7s</div></div>
+      </div>
+    </div>
+    <h3 class="sub">视频片段</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <video src="media/seq1_presenter_20260519T075013_b2554fb8.mp4" controls playsinline></video>
+        <div class="media-info">
+          <div class="media-name">seq1_presenter</div>
+          <div class="media-meta">image_list + audio_list</div>
+          <details><summary>View prompt</summary><pre>Refs: cafe_presenter_ref, vo_seg1</pre></details>
+        </div>
+      </div>
+      <div class="media-card">
+        <video src="media/seq2_broll_typing_20260519T074958_bf707b53.mp4" controls playsinline></video>
+        <div class="media-info">
+          <div class="media-name">seq2_broll_typing</div>
+          <div class="media-meta">no image_list</div>
+          <details><summary>View prompt</summary><pre>Refs: (none)</pre></details>
+        </div>
+      </div>
+      <div class="media-card">
+        <video src="media/seq3_broll_phone_20260519T074916_d5d8e5bc.mp4" controls playsinline></video>
+        <div class="media-info">
+          <div class="media-name">seq3_broll_phone</div>
+          <div class="media-meta">pull-back face, no ref</div>
+          <details><summary>View prompt</summary><pre>Refs: (none)</pre></details>
+        </div>
+      </div>
+    </div>
+    <h3 class="sub" style="margin-top:20px">配音</h3>
+    <div class="media-grid">
+      <div class="media-card">
+        <audio src="media/vo_seg1_20260519T074230_afaf73ff.mp3" controls></audio>
+        <div class="media-info"><div class="media-name">vo_seg1</div><div class="media-meta">eleven_v3 · 8.96s</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>文件索引</h2>
+    <p class="file-index">
+      <code>analysis/62861322045_30s-cafe-narrator-voice-character-inconsistency.md</code><br>
+      <code>analysis/langfuse-data/cases/62861322045/trace-1-920eeb52.json</code><br>
+      <code>analysis/langfuse-data/cases/62861322045/assets-with-prompts.json</code>
+    </p>
+  </section>
+</div>
+</body>
+</html>

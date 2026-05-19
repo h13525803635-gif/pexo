@@ -1,0 +1,99 @@
+[
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "3deb5de4626b8738",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "980e155cdcc81cce",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_presenter",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "d92d814f2a958bc2",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq1_transcript",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "6fddf7eb9ae9f3aa",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_broll_typing",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "f61902bdd25f6524",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_broll_phone",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "3bce46f39347147a",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/62861322045/workspace/assets/final_assembly_v1.mp4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "6762447384cec64a",
+    "prompt": "节省下来的时间，我用来做真正重要的事。",
+    "model": "eleven_v3",
+    "name": "vo_seg3",
+    "type": "audio",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "79626e7cb5e7ad79",
+    "prompt": "现在打开App，任务自动整理好，轻松点击就能完成。",
+    "model": "eleven_v3",
+    "name": "vo_seg2",
+    "type": "audio",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "e0a33c9680cd0281",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "cafe_presenter_ref",
+    "type": "image"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-920eeb52.json",
+    "observation_id": "e8b7ae4c16eb06bc",
+    "prompt": "以前我每天要花两三个小时，在各种平台之间切来切去。自从用了这款App，一切都不一样了。",
+    "model": "eleven_v3",
+    "name": "vo_seg1",
+    "type": "audio",
+    "voice_id": "4VZIsMPtgggwNg7OXbPY"
+  }
+]
