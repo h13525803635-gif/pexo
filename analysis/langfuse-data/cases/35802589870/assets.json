@@ -1,0 +1,99 @@
+[
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "26cee26e48b0450a",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/35802589870/workspace/assets/fitness_app_explainer_30s.mp4"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "9ee361e78e984edb",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic_morning",
+    "type": "audio"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "1365a08b6afae3ee",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq1",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "3eac87b2f8cf9ad9",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq4",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "690a89d789266360",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq4_closing_smile",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "7cab103083bb2ccf",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_smartwatch_data",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "7da2402b662fba62",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_park_bench_talk",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "90659385ea641712",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_phone_app_logging",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "a8670cbe9a45b4ff",
+    "prompt": "说实话，以前健身我完全靠感觉，练了两个月，身体没变化，自己也不知道哪里出了问题。[calm pause] 后来用这个App，训练数据、睡眠质量、热量摄入全在一起，我才发现——原来我一直恢复不够。[reflective] 现在我不只是在训练，我在读懂自己的身体。你也可以试试。[warm, confident]",
+    "model": "eleven_v3",
+    "name": "voiceover_main",
+    "type": "audio",
+    "voice_id": "W8lBaQb9YIoddhxfQNLP"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-c43b2547.json",
+    "observation_id": "f29cc3fda4c827ab",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "character_ref_male",
+    "type": "image"
+  }
+]
