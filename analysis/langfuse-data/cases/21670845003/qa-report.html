@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case 21670845003 — Silent Hearts Lipsync QA</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #c9d1d9; --text-dim: #8b949e;
+      --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+      --orange: #d29922; --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; line-height: 1.8; max-width: 720px; margin: 0 auto; }
+    .header .case-id { font-family: monospace; color: var(--accent); font-size: 13px; margin-top: 8px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .value { font-size: 26px; font-weight: 700; }
+    .stat-card .value.red { color: var(--red); }
+    .stat-card .value.orange { color: var(--orange); }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    section { margin-bottom: 56px; }
+    section > h2 { font-size: 20px; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px; }
+    .callout { background: var(--surface); border-left: 3px solid var(--red); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 24px; font-size: 13px; line-height: 1.7; }
+    .callout strong { color: var(--accent); }
+    .problem-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 900px) { .problem-grid { grid-template-columns: 1fr 1fr; } .problem-grid .wide { grid-column: 1 / -1; } }
+    .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+    .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+    .problem-card.p2::before { background: var(--orange); }
+    .problem-card.p3::before { background: var(--purple); }
+    .problem-card .p-tag { font-size: 11px; font-weight: 700; color: var(--red); margin-bottom: 6px; }
+    .p2 .p-tag { color: var(--orange); }
+    .p3 .p-tag { color: var(--purple); }
+    .problem-card .p-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+    .problem-card .p-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px; }
+    .problem-card ul { font-size: 13px; padding-left: 18px; color: var(--text); }
+    .problem-card li { margin-bottom: 6px; }
+    .problem-card code { font-family: monospace; font-size: 12px; background: var(--surface2); padding: 2px 6px; border-radius: 3px; }
+    .flow-chain { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+    .flow-step { font-size: 12px; padding: 8px 12px; border-radius: 6px; background: var(--surface2); border-left: 3px solid var(--border); }
+    .flow-step.bad { border-left-color: var(--red); }
+    .flow-step.fix { border-left-color: var(--green); }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .tl-item { position: relative; margin-bottom: 14px; }
+    .tl-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .tl-item.error::before { border-color: var(--red); background: rgba(248,81,73,0.3); }
+    .tl-item.warn::before { border-color: var(--orange); background: rgba(210,153,34,0.3); }
+    .tl-item.success::before { border-color: var(--green); background: rgba(63,185,80,0.3); }
+    .tl-item .tl-head { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; }
+    .tl-ver { font-family: monospace; color: var(--accent); background: var(--surface2); padding: 2px 8px; border-radius: 4px; }
+    .tl-time { color: var(--text-dim); font-family: monospace; }
+    .tl-body { font-size: 13px; color: var(--text-dim); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .compare-table th, .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+    .compare-table th { background: var(--surface2); color: var(--text-dim); font-size: 12px; }
+    .compare-table .dup { color: var(--red); font-weight: 600; }
+    .mod-list { display: flex; flex-direction: column; gap: 12px; }
+    .mod-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; font-size: 13px; }
+    .mod-card .mod-file { font-family: monospace; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .media-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .media-card video, .media-card img, .media-card audio { width: 100%; display: block; background: #000; }
+    .media-card video { max-height: 320px; }
+    .media-card .media-info { padding: 10px 12px; font-size: 12px; }
+    .media-card .media-name { font-weight: 600; word-break: break-all; }
+    .media-card .media-meta { color: var(--text-dim); margin-top: 4px; }
+    .file-index { font-size: 13px; color: var(--text-dim); line-height: 2; }
+    .file-index code { color: var(--accent); font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>Silent Hearts — V3 成片问题分析</h1>
+    <p class="subtitle">Revision made it worse · Audio issue · Bad pacing — 根因：重复段填洞、双音轨混音、固定 15s 切歌</p>
+    <p class="case-id">Case ID: 21670845003 · 2026-05-19 · 38 Langfuse traces</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">QA 问题</div><div class="value red">3</div><div class="desc">P1 × 3</div></div>
+    <div class="stat-card"><div class="label">Traces</div><div class="value accent">38</div><div class="desc">~2h20m</div></div>
+    <div class="stat-card"><div class="label">成片迭代</div><div class="value orange">V1→V3</div><div class="desc">无 full_v3 交付</div></div>
+    <div class="stat-card"><div class="label">V2 时长</div><div class="value accent">195s</div><div class="desc">13 clips × 15s</div></div>
+    <div class="stat-card"><div class="label">重复镜头</div><div class="value red">5</div><div class="desc">seg5/7/10 各 2×</div></div>
+    <div class="stat-card"><div class="label">Skill 建议</div><div class="value accent">3</div><div class="desc">assembly / gen / mod</div></div>
+  </div>
+
+  <section>
+    <h2>核心结论</h2>
+    <div class="callout">
+      <strong>V2（<code>silent_hearts_full_v2.mp4</code>）</strong> 是 QA 所指的「修订后更差」的主要成片：去掉 seg15 并加 crossfade，但仍用 <strong>seg5/7/10 各播两遍</strong> 填补缺失段，且仅有视频轨、每段内嵌 co-generated 音频拼接。<strong>V3</strong> 在用户要求「无音乐、只要口型表情」后又批量重生 <code>v3_seg1–10</code>，积分耗尽，<strong>未交付 full_v3</strong>。
+    </div>
+  </section>
+
+  <section>
+    <h2>问题与解决方案</h2>
+    <div class="problem-grid">
+      <div class="problem-card wide">
+        <div class="p-tag">P1 — Revision made it worse</div>
+        <div class="p-title">每次修订在错误时间线上叠补丁</div>
+        <div class="p-desc">V2 未解决缺段；V2 TTS/<code>v2_lip</code> 从未进成片；V3 全量 silent 重生且未交付。</div>
+        <ul>
+          <li><strong>禁止</strong>用相邻段复制填洞（seg4→5, seg6/8→7, seg11→10）</li>
+          <li>修订流程：先改 edit spec → 用户确认 → 再 render</li>
+          <li>「去掉音乐」= assembly mute，不要默认 <code>v3_seg*</code> 全量重生</li>
+        </ul>
+        <div class="flow-chain">
+          <div class="flow-step bad">V1: 16 段硬拼（seg15 用 3 次）</div>
+          <div class="flow-step bad">V2: 删 seg15 + crossfade，仍重复 5/7/10</div>
+          <div class="flow-step bad">歌词修订: v2_lip 生成但未组装</div>
+          <div class="flow-step bad">V3: v3_seg 重生 → 积分耗尽</div>
+          <div class="flow-step fix">修复: 缺段补生成 + 单 master 音轨 + 最小 diff 修订</div>
+        </div>
+      </div>
+
+      <div class="problem-card p2">
+        <div class="p-tag">P1 — Audio issue</div>
+        <div class="p-title">无双音轨策略 → 重复/错位/非原曲</div>
+        <ul>
+          <li>trace-9: 段内 co-gen + 用户 MP3 叠加（AUDIO DUPLICADO）</li>
+          <li>trace-11: 画面比音乐慢</li>
+          <li>V2: 无 <code>audio_tracks</code>，仅段内嵌音频</li>
+          <li>Lipsync 默认 <code>sound=off</code>；master = 用户 MP3 或 TTS</li>
+        </ul>
+      </div>
+
+      <div class="problem-card p3">
+        <div class="p-tag">P1 — Bad pacing</div>
+        <div class="p-title">固定 15s 网格 + 重复镜头</div>
+        <ul>
+          <li>应按歌词时间轴切分，非 uniform 15s</li>
+          <li>全曲 segment 齐再组装；缺段缩短或占位，禁止 duplicate</li>
+          <li>支持 per-clip speed 对齐音乐节拍</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>silent_hearts_full_v2 时间线</h2>
+    <table class="compare-table">
+      <thead><tr><th>#</th><th>Clip</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>1–3</td><td>seg1, seg2, seg3</td><td>正常</td></tr>
+        <tr><td>4–5</td><td class="dup">seg5, seg5</td><td class="dup">重复（缺 seg4）</td></tr>
+        <tr><td>6–7</td><td class="dup">seg7, seg7</td><td class="dup">重复（缺 seg6, seg8）</td></tr>
+        <tr><td>8</td><td>seg9</td><td>正常</td></tr>
+        <tr><td>9–10</td><td class="dup">seg10, seg10</td><td class="dup">重复（缺 seg11）</td></tr>
+        <tr><td>11–13</td><td>seg12, seg13, seg14</td><td>正常；seg15 已删</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px;font-size:12px;color:var(--text-dim)">来源：trace-19 <code>execute_edit_video</code> · 输出 195s · 12× crossfade 800ms · 无独立 audio_tracks</p>
+  </section>
+
+  <section>
+    <h2>迭代时间线</h2>
+    <div class="timeline">
+      <div class="tl-item success"><div class="tl-head"><span class="tl-ver">Kickoff</span><span class="tl-time">03:52</span></div><div class="tl-body">3 段表演 + BGM → silent_hearts_performance.mp4</div></div>
+      <div class="tl-item success"><div class="tl-head"><span class="tl-ver">Lipsync</span><span class="tl-time">04:03</span></div><div class="tl-body">用户上传 MP3，15s 分段 lipsync</div></div>
+      <div class="tl-item error"><div class="tl-head"><span class="tl-ver">QA</span><span class="tl-time">05:02</span></div><div class="tl-body">音频重复 — 需排除超前音轨</div></div>
+      <div class="tl-item warn"><div class="tl-head"><span class="tl-ver">QA</span><span class="tl-time">05:16</span></div><div class="tl-body">视频比音乐慢 — 未做 speed 校正</div></div>
+      <div class="tl-item warn"><div class="tl-head"><span class="tl-ver">V1</span><span class="tl-time">05:34</span></div><div class="tl-body">full_clip — 16 段含重复</div></div>
+      <div class="tl-item error"><div class="tl-head"><span class="tl-ver">V2</span><span class="tl-time">05:40</span></div><div class="tl-body">full_v2 — 13 段，仍重复 5/7/10</div></div>
+      <div class="tl-item warn"><div class="tl-head"><span class="tl-ver">V2.5</span><span class="tl-time">05:44</span></div><div class="tl-body">TTS + v2_lip 生成，未进成片</div></div>
+      <div class="tl-item error"><div class="tl-head"><span class="tl-ver">V3</span><span class="tl-time">05:59</span></div><div class="tl-body">v3_seg 无声重生 — 无 full_v3</div></div>
+      <div class="tl-item error"><div class="tl-head"><span class="tl-ver">Credits</span><span class="tl-time">06:11</span></div><div class="tl-body">积分耗尽</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skill 修改建议</h2>
+    <div class="mod-list">
+      <div class="mod-card"><div class="mod-file">assembly-skill/SKILL.md</div>禁止 duplicate clip 填洞；lipsync 强制单 master 音轨 + 段内 mute；合成前音频探测</div>
+      <div class="mod-card"><div class="mod-file">generation-skill/SKILL.md</div>lipsync 默认 sound=off；长 MV 先歌词时间轴再批量生成</div>
+      <div class="mod-card"><div class="mod-file">modification-skill/SKILL.md</div>修订 diff 确认；「去音乐」走 mute 非 regen</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>媒体样本</h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="media/gemini-2.5-flash-image_Create_a_full_body_2D_animated_female_character_inspired_by_the_uploaded_referen-0.jpg" alt="character ref" />
+        <div class="media-info"><div class="media-name">角色参考图</div><div class="media-meta">image · gemini-2.5-flash</div></div>
+      </div>
+      <div class="media-card">
+        <video src="media/lipsync_seg1_0_15s_20260519T041551_3edc6a68.mp4" controls playsinline></video>
+        <div class="media-info"><div class="media-name">lipsync_seg1</div><div class="media-meta">0–15s · seedance</div></div>
+      </div>
+      <div class="media-card">
+        <video src="media/lipsync_seg2_15_30s_20260519T051108_4dede9e1.mp4" controls playsinline></video>
+        <div class="media-info"><div class="media-name">lipsync_seg2</div><div class="media-meta">15–30s</div></div>
+      </div>
+      <div class="media-card">
+        <video src="media/singer_seq1_closeup_20260519T035819_75802012.mp4" controls playsinline></video>
+        <div class="media-info"><div class="media-name">singer_seq1 (初版)</div><div class="media-meta">表演段</div></div>
+      </div>
+      <div class="media-card">
+        <audio src="media/Waiting_On_To_Stay_ok.mp3" controls></audio>
+        <div class="media-info"><div class="media-name">用户原曲 MP3</div><div class="media-meta">Waiting_On_To_Stay_ok.mp3</div></div>
+      </div>
+      <div class="media-card">
+        <audio src="media/silent_hearts_vocals_20260519T054549_2aed2df7.mp3" controls></audio>
+        <div class="media-info"><div class="media-name">TTS vocals (V2)</div><div class="media-meta">未进最终成片</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>文件索引</h2>
+    <div class="file-index">
+      <div>分析报告：<code>analysis/21670845003_195s_lipsync-revision-audio-pacing.md</code></div>
+      <div>Langfuse traces：<code>analysis/langfuse-data/cases/21670845003/trace-*.json</code> (38 files)</div>
+      <div>资产索引：<code>analysis/langfuse-data/cases/21670845003/assets.json</code></div>
+      <div>本页：<code>analysis/langfuse-data/cases/21670845003/qa-report.html</code></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

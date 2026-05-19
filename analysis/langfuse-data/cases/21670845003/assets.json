@@ -1,0 +1,450 @@
+[
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-f76187f5.json",
+    "observation_id": "06ab1e7167c07144",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "singer_seq3_wide_to_close",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-f76187f5.json",
+    "observation_id": "1059af1e283f3444",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "singer_seq1_closeup",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-f76187f5.json",
+    "observation_id": "1cc4e3964f067351",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/21670845003/workspace/assets/silent_hearts_performance.mp4"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-f76187f5.json",
+    "observation_id": "7d6a7cd0e1ad4959",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "silent_hearts_bgm",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-f76187f5.json",
+    "observation_id": "3ec953c3a2bcaef4",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "singer_seq2_midshot",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "044c14934564cafe",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg4_45_60s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "9047306352a37fa0",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg6_75_90s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "959eb51a8c92e061",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg12_165_180s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "28430cfcbee39c16",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg14_195_210s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "473a239321be4ad7",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg15_210_225s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "4ed2fd85195286c0",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg13_180_195s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "5e0f6117379992d2",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg10_135_150s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "b535cddc3ade62d2",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg9_120_135s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "d2d0b74902630ba9",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg7_90_105s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "fb8067ad6ccaf92e",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg5_60_75s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "9d1e83a274bbd4fd",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg8_105_120s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "b90ae44d760f53c4",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg11_150_165s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-15-ac7a4b7d.json",
+    "observation_id": "36ea6433fec2f573",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg16_225_241s",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-19-9b47d519.json",
+    "observation_id": "ad7500f8b3158c41",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "transcribe_seg15",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-19-9b47d519.json",
+    "observation_id": "da95a31690a72af5",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "transcribe_seg14",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "26721b74ee668633",
+    "prompt": "[singing] Hear the city breathing\nIn the space between the lines\nNighttime darkness holds your breath\nAnd memories collide\nYou stay quiet\nSoft and slow breaths\nYou're steady through emotion\nWhile I stay where you rest\nAnd everything feels fine\nLike a valley standing still\nTraces of time surround me\nAnd nothing pulls me home\nIn the pace where I can fade\nAnd I don't know\nIf maybe I'm just a feeling\nAnd you know\nIt's never enough for me\nYeah, you stay\nAnd move so slow\nAnd nothing pulls me home\nAnd I can't stand\nWanting to know what you're saying\nBut I know\nIt's time for fading gray\nI know\nIt fills you with agitation\nBut I don't want\nTo say no more\nYou have things I never could\nBut love takes time for letting go\nAnd there's\nNothing left to say\nAnd I don't know\nIf I'm waiting just to stay\nAnd I know\nIt's coming over me, babe\nAnd I'll stay\nAnd find this heart of gold\nAnd I know\nNothing bad can last\nAnd I can't stay\nI know what it feels like\nTo live in vain\nI don't wanna be\nForever changed\nI know\nThere's nothing left to plead\nAnd I don't know\nIf I still feel safe\nAnd I don't know\nIf I'm waiting just to stay\nWaiting just to stay\nAnd I know\nIt's coming over me, babe\nComing over me, babe\nAnd stay\nAnd find this heart of gold\nFind this heart of gold\nAnd you know\nNothing bad can last\nAnd I can't stay\nIf I don't know\nI can't stay",
+    "model": "eleven_v3",
+    "name": "silent_hearts_vocals",
+    "type": "audio",
+    "voice_id": "Rachel"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "2fc37d7b797fb9ac",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg6",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "6e00930ce50ee816",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg7",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "403bf62566b4a2d2",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg5",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "4cea8e093fa63eaf",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg9",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "113bbceae67b9f01",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg1",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "1340dfebd286f098",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg3",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "ee3d5ead2a93d876",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg2",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "17e53dbe91bf9ded",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg10",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "b05f3ecb76851df8",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg4",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-21-c443286d.json",
+    "observation_id": "b955eddeb5321dc4",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v2_lip_seg8",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "119e706f3dee26e5",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg8",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "138b9c644bb8c139",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg10",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "d429097b092ca61a",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg5",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "17a95937fcdfe728",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg4",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "e16479d6fe28294b",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg1",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "5abe415048682b67",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg6",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "7025c48860a55e26",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg7",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "fa862d2ac8da83c9",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg3",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "94e639094e84f41c",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg2",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-25-31b8c329.json",
+    "observation_id": "a0ec11fa47fdbabd",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "v3_seg9",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-5-93c2e399.json",
+    "observation_id": "958974ffc8430e08",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "music_transcription",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-0f93f27c.json",
+    "observation_id": "cab61b37bf7706f0",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg1_0_15s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-0f93f27c.json",
+    "observation_id": "d463105917c299fb",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg3_30_45s",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-7-0f93f27c.json",
+    "observation_id": "719caf88f177ddc8",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "lipsync_seg2_15_30s",
+    "type": "video"
+  }
+]
