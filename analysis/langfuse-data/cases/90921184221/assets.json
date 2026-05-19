@@ -1,0 +1,109 @@
+[
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "0a1e5506e9df1900",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq1",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "06aad809c7dff7aa",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_guitar",
+    "type": "audio"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "505355cf01a503d2",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/90921184221/workspace/assets/final_accounting_app_ad.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "1ea86d1eb758689c",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_main_open",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "460561247474aa3c",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "asr_seq4",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "750c93cd81cdda59",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_broll_phone",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "75c9d4aad2cda6f0",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_broll_chart",
+    "type": "video"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "aaee68f353c0b115",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "char_ref_main",
+    "type": "image"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "b96f54865c3d8065",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq4_main_close",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "ea7d375da8e2634c",
+    "prompt": "以前每个月花了多少钱，我真的说不清楚。后来开始记账，才发现……原来账单可以这么清晰。",
+    "model": "eleven_v3",
+    "name": "vo_part_a",
+    "type": "audio",
+    "voice_id": "W8lBaQb9YIoddhxfQNLP"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-a284c3a5.json",
+    "observation_id": "febf4b8b5da55c2f",
+    "prompt": "现在每个月看一眼结余，心里踏实多了。",
+    "model": "eleven_v3",
+    "name": "vo_part_b",
+    "type": "audio",
+    "voice_id": "W8lBaQb9YIoddhxfQNLP"
+  }
+]
