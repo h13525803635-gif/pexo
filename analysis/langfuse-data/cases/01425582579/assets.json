@@ -1,0 +1,119 @@
+[
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "69e01904adcdfa02",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/01425582579/workspace/assets/final_explainer_30s.mp4"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "2250f5d2f90c6b35",
+    "prompt": "以前我一天要花好几个小时处理工作消息。自从用了这款App，所有事情变得超级顺手。",
+    "model": "eleven_v3",
+    "name": "vo_seq1_lipsync",
+    "type": "audio",
+    "voice_id": "BybEfHMQu0fyclQR7lfh"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "6990636c60c6cb1d",
+    "prompt": "以前我一天要花好几个小时处理工作消息。自从用了这款App，所有事情变得超级顺手。打开电脑，几秒钟搞定；拿起手机，随时随地都能跟上进度。真的，它帮我每天省下了至少两个小时。",
+    "model": "eleven_v3",
+    "name": "character_vo_full",
+    "type": "audio",
+    "voice_id": "BybEfHMQu0fyclQR7lfh"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "9033db9b0ffef59b",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "character_ref",
+    "type": "image"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "54a46412242adc17",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq2_asr_check",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "6587de74fe1a6164",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_phone_broll",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "be775a9532d16a16",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_talking_head",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "b9ed7eb0af6e6e7d",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq1v2_asr_check",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "c786b1d41670f527",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic_cafe",
+    "type": "audio"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "cad337080592d469",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_presenter_silent",
+    "type": "video"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "d0fe91ada08a6ba7",
+    "prompt": "",
+    "model": "scribe_v2",
+    "name": "seq1_asr_check",
+    "type": "audio",
+    "voice_id": ""
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-12101510.json",
+    "observation_id": "d8a6a3952afc961e",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_laptop_broll",
+    "type": "video"
+  }
+]

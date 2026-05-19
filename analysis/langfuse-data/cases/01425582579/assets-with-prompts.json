@@ -1,0 +1,88 @@
+[
+  {
+    "type": "image",
+    "name": "character_ref",
+    "provider": "seedream",
+    "model": "seedream-4-5-251128",
+    "prompt": "Portrait of a young East Asian man in his late 20s, wearing casual business attire - light beige linen shirt, neat appearance, natural short black hair, clean-shaven, warm friendly smile, sitting at a modern café table. Cinematic shallow depth of field, warm natural window light from the side, soft bokeh background with blurred café interior. Film-like texture, warm golden tones, photorealistic.",
+    "references": []
+  },
+  {
+    "type": "voiceover",
+    "name": "character_vo_full",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "BybEfHMQu0fyclQR7lfh",
+    "text": "以前我一天要花好几个小时处理工作消息。自从用了这款App，所有事情变得超级顺手。打开电脑，几秒钟搞定；拿起手机，随时随地都能跟上进度。真的，它帮我每天省下了至少两个小时。",
+    "note": "WRONG voice_id — not in catalog. Should be 4VZIsMPtgggwNg7OXbPY (James Gao) or BrbEfHMQu0fyclQR7lfh (Kevin Tu)"
+  },
+  {
+    "type": "voiceover",
+    "name": "vo_seq1_lipsync",
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "voice_id": "BybEfHMQu0fyclQR7lfh",
+    "text": "以前我一天要花好几个小时处理工作消息。自从用了这款App，所有事情变得超级顺手。",
+    "duration": "8.24s"
+  },
+  {
+    "type": "video",
+    "name": "seq1_talking_head",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "9",
+    "prompt": "Cinematic photorealistic look, warm golden tones, soft natural window light, shallow depth of field film texture. A young East Asian man in his late 20s wearing casual business attire (light beige linen shirt), sitting at a modern cafe table, looking directly at camera with a warm natural smile. Medium shot, character fills center frame. He is speaking naturally and conversationally in Mandarin Chinese, lips moving with genuine expression. Soft bokeh cafe background with warm afternoon light. Sound: cafe ambient sound, gentle murmur of coffee shop, no background music, no musical score, no musical instruments - sound effects and ambient audio only.",
+    "references": ["character_ref_20260519T064242_bd482742.png"],
+    "audio_list": ["vo_seq1_lipsync_20260519T064319_819d99c3.mp3"],
+    "asr_result": "对对对。呃，其实我在这边也呃，生活了一段时间了，所以 — MISMATCH"
+  },
+  {
+    "type": "video",
+    "name": "seq1_presenter_silent",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "9",
+    "prompt": "Cinematic photorealistic look, warm golden tones, soft natural window light, shallow depth of field film texture. A young East Asian man in his late 20s wearing casual business attire (light beige linen shirt), sitting at a modern cafe table, looking directly at camera with a warm natural confident smile. Medium shot, character fills center frame. He nods slightly and gestures warmly as if engaged in a friendly conversation - natural body language. Beautiful bokeh cafe background with warm afternoon light, plants and coffee cups blurred in background. Sound: warm cafe ambient sound, gentle murmur and coffee shop sounds, no speech, no dialogue, no voice, no spoken words, no background music, no musical score, no musical instruments - sound effects and ambient audio only.",
+    "references": ["character_ref_20260519T064242_bd482742.png"],
+    "note": "USED IN FINAL — silent presenter + post VO overlay"
+  },
+  {
+    "type": "video",
+    "name": "seq2_laptop_broll",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "11",
+    "prompt": "Cinematic photorealistic look, warm golden tones, soft natural window light, shallow depth of field film texture. Close-up to medium shot of a young East Asian man's hands typing smoothly and confidently on a sleek laptop keyboard at a cafe table. The motion is fluid and effortless. Warm afternoon light from a nearby window, beautiful bokeh background showing blurred cafe interior. Sound: soft keyboard click sounds, gentle ambient cafe sound, no speech, no dialogue, no voice, no spoken words, no background music, no musical score - sound effects and ambient audio only.",
+    "references": ["character_ref_20260519T064242_bd482742.png"]
+  },
+  {
+    "type": "video",
+    "name": "seq3_phone_broll",
+    "provider": "seedance",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "reference2video",
+    "sound": "on",
+    "duration": "11",
+    "prompt": "Cinematic photorealistic look, warm golden tones, soft natural window light, shallow depth of field film texture. Close-up shot of a young East Asian man's hand holding and tapping on a smartphone screen effortlessly, gesturing with relaxed confidence. Warm golden afternoon light, shallow depth of field with blurred cafe background. Camera slowly pulls back to reveal the man smiling as he uses the phone. Sound: soft phone tap sounds, ambient cafe background noise, no speech, no dialogue, no voice, no spoken words, no background music, no musical score - sound effects and ambient audio only.",
+    "references": ["character_ref_20260519T064242_bd482742.png"]
+  },
+  {
+    "type": "music",
+    "name": "bgm_acoustic_cafe",
+    "provider": "elevenlabs",
+    "model": "music_v1",
+    "prompt": "Gentle acoustic guitar, warm and relaxed cafe atmosphere, fingerpicking style, soft melodic modern folk. Light and uplifting mood, modern lifestyle feel. Clean and intimate tone, no drums, no heavy bass, just warm acoustic guitar with subtle ambient texture.",
+    "duration_ms": 32000
+  },
+  {
+    "type": "final",
+    "name": "final_explainer_30s",
+    "note": "Seq1=seq1_presenter_silent + character_vo_full overlay 0-18.96s + BGM"
+  }
+]
