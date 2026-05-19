@@ -1,0 +1,99 @@
+[
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "136876d277567302",
+    "prompt": "说实话，坚持健身这件事，我以前总是三分钟热度。直到我开始用这款App记录自己的每一次训练。",
+    "model": "eleven_v3",
+    "name": "vo_seq1_talking",
+    "type": "audio",
+    "voice_id": "siqi_liu"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "3b8cb3806e27c880",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq1_talking_head",
+    "type": "video"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "4e2ec165de83edc3",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq2_smartwatch",
+    "type": "video"
+  },
+  {
+    "tool": "show_final_video",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "8a3ecbb1e820b7fa",
+    "name": "final_video",
+    "type": "final",
+    "prompt": "",
+    "file_path": "/projects/46021149558/workspace/assets/fitness_app_explainer_v1.mp4"
+  },
+  {
+    "tool": "video_generate",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "8c36365f37cbcc98",
+    "prompt": "",
+    "model": "doubao-seedance-2-0-260128",
+    "mode": "text2video",
+    "name": "seq3_phone_app",
+    "type": "video"
+  },
+  {
+    "tool": "music_generate",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "729b470138e0b1ce",
+    "prompt": "",
+    "model": "music_v1",
+    "name": "bgm_acoustic_guitar",
+    "type": "audio"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "7e7cae257098e681",
+    "prompt": "手表上的心率、步数、训练强度，这些数据让我第一次真实看见自己的身体状态。",
+    "model": "eleven_v3",
+    "name": "vo_seq2_watch_v2",
+    "type": "audio",
+    "voice_id": "siqi_liu"
+  },
+  {
+    "tool": "image_generate",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "806eb417c81c5981",
+    "prompt": "",
+    "model": "seedream-4-5-251128",
+    "name": "char_ref_main",
+    "type": "image"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "9530f68ffe57e925",
+    "prompt": "手表上的每一条数据，心率、步数、训练强度，这些以前对我来说都是模糊的概念。现在我能很直观地看到自己的身体在说什么。",
+    "model": "eleven_v3",
+    "name": "vo_seq2_watch",
+    "type": "audio",
+    "voice_id": "siqi_liu"
+  },
+  {
+    "tool": "audio_produce",
+    "trace_file": "trace-1-739643c9.json",
+    "observation_id": "cd0c4d36787d328d",
+    "prompt": "饮食和睡眠，记录下来才发现原来小事影响最大。现在坓练已经连续六个月，不再是三分钟热度。",
+    "model": "eleven_v3",
+    "name": "vo_seq3_phone",
+    "type": "audio",
+    "voice_id": "siqi_liu"
+  }
+]
