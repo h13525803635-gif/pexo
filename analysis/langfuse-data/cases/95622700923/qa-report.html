@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>Case 95622700923 — Supply Chain QA</title>
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#c9d1d9;--dim:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    .container{max-width:1400px;margin:0 auto;padding:32px 24px}
+    .header{text-align:center;margin-bottom:40px}
+    .header h1{font-size:26px;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .header .sub{color:var(--dim);font-size:14px;margin-top:8px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:40px}
+    .stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+    .stat .v{font-size:28px;font-weight:700;color:var(--accent)}
+    .stat .l{font-size:11px;color:var(--dim);text-transform:uppercase;margin-top:4px}
+    h2{font-size:18px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:10px;margin:32px 0 18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+    .card.p2::before{background:var(--orange)}
+    .card h3{font-size:15px;margin-bottom:10px}
+    .card p{font-size:13px;color:var(--dim);margin-bottom:10px}
+    .flow{font-size:12px;background:var(--surface2);padding:8px 12px;border-radius:6px;margin:4px 0;border-left:3px solid var(--red)}
+    .flow.fix{border-left-color:var(--green)}
+    table{width:100%;border-collapse:collapse;background:var(--surface);font-size:13px;margin:12px 0}
+    th,td{padding:10px 14px;border-bottom:1px solid var(--border);text-align:left}
+    th{background:var(--surface2);color:var(--dim)}
+    .bad{color:var(--red)}.ok{color:var(--green)}.warn{color:var(--orange)}
+    pre{background:var(--surface);padding:16px;border-radius:8px;font-size:12px;overflow:auto;border:1px solid var(--border)}
+    .tl{padding-left:28px;position:relative}
+    .tl-item{margin-bottom:14px;font-size:13px}
+    .tl-item .t{color:var(--dim);font-size:12px}
+    .mod{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin:8px 0;font-size:13px}
+    .mod strong{color:var(--green)}
+    a{color:var(--accent)}
+    .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;background:var(--surface2);color:var(--accent);margin-right:6px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>95622700923 — Supply Chain Disruptions QA</h1>
+    <p class="sub">Langfuse trace 52e20c00 · HyperFrames HTML 合成 · 成片 Supply_Chain_Disruptions_v2.mp4</p>
+    <p class="sub"><span class="tag">5 个问题</span><span class="tag">177s 时间轴</span><span class="tag">13 B-roll</span><span class="tag">2× render</span></p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v" style="color:var(--red)">5</div><div class="l">P1 问题</div></div>
+    <div class="stat"><div class="v">737</div><div class="l">Observations</div></div>
+    <div class="stat"><div class="v">296</div><div class="l">Tool 调用</div></div>
+    <div class="stat"><div class="v" style="color:var(--orange)">0</div><div class="l">probe 成功</div></div>
+    <div class="stat"><div class="v">46m</div><div class="l">总耗时</div></div>
+  </div>
+
+  <h2>调用路径</h2>
+  <pre>09:47 video_generate ×13 (happyhorse ~10s)
+09:53 music_generate → sc_bgm
+09:54 audio_produce → sc_vo_part1 (79.75s) + sc_vo_part2 (96.955s) + SRT
+09:56 probe_media ×3 → 全部失败
+09:59 write_file → supply_chain_video.html
+10:00 submit_render #1 → Supply_Chain_Disruptions.mp4
+10:04 edit_file 修补（字幕 / clip class / URL）
+10:17 submit_render #2 → Supply_Chain_Disruptions_v2.mp4
+10:31 show_final_video</pre>
+
+  <h2>问题 → 根因 → 解决方案</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>1. 字幕重叠且跟音频不对位</h3>
+      <p>画面切点按等分 177s 硬排，未按 SRT 句点对齐；title/chapter 卡片与 SRT 底部重叠。</p>
+      <div class="flow">先写 VO → 等分 B-roll slot → burn SRT 贴画面时间</div>
+      <div class="flow">70.3s VO「empty shelves」时画面是 S7 会议室</div>
+      <div class="flow fix">VO-first 时间轴：以 SRT cue 为锚点切 B-roll；title 时段暂停 SRT</div>
+    </div>
+    <div class="card">
+      <h3>2. 卡片覆盖画面上方</h3>
+      <p>v2 修补给 chapter 卡片加了 <code>class="clip"</code>，触发 width/height 100% 全屏 CSS。</p>
+      <div class="flow">.clip { top:0; left:0; width:100%; height:100% }</div>
+      <div class="flow fix">卡片用独立 .overlay-card class，禁止复用 .clip</div>
+    </div>
+    <div class="card">
+      <h3>3. 会议中文对话 + 音频重叠</h3>
+      <p>S7 boardroom 用 HappyHorse + "intense discussion" prompt，生成中文 native audio，与英文 TTS 旁白同播。</p>
+      <div class="flow">video_generate 无 sound=off → embedded 中文 speech</div>
+      <div class="flow fix">B-roll 强制 sound=off；prompt 禁对话词；speech audit 后 mute/regen</div>
+    </div>
+    <div class="card p2">
+      <h3>4. 后半段黑屏间隔长</h3>
+      <p>slot 时长 &gt; 源片 ~10s，无 loop；probe 失败未拦截。</p>
+      <div class="flow">S6–S12 各超 2–4s；S13 超 29s（注释写 loop 但未实现）</div>
+      <div class="flow fix">probe 成功后 slot ≤ 源时长，或 data-loop 填充</div>
+    </div>
+    <div class="card p2">
+      <h3>5. 结尾 ~20s 黑屏</h3>
+      <p>S13 占 138–177s（39s slot），源片 ~10s，148s 起无画面；VO 仍播至 176.7s。</p>
+      <div class="flow">148–177s ≈ 29s 纯黑底 (#000 composition)</div>
+      <div class="flow fix">S13 loop 或缩短 slot；结尾画面与 VO 同时结束</div>
+    </div>
+  </div>
+
+  <h2>VO vs 画面对齐证据</h2>
+  <table>
+    <tr><th>时间</th><th>旁白 (SRT)</th><th>画面</th><th>判定</th></tr>
+    <tr><td>70.3s</td><td>empty shelves</td><td>S7 会议室</td><td class="bad">错位</td></tr>
+    <tr><td>75.7s</td><td>longer lead times</td><td>S8 供应商网络</td><td class="bad">错位</td></tr>
+    <tr><td>79.8s</td><td>recovery strategies 开始</td><td>S8 供应商网络</td><td class="bad">错位</td></tr>
+    <tr><td>0–5s</td><td>VO + SRT</td><td>title card 全屏遮罩</td><td class="warn">重叠</td></tr>
+  </table>
+
+  <h2>时长超出 → 黑屏估算</h2>
+  <table>
+    <tr><th>片段</th><th>Slot</th><th>源片 ~10s</th><th>超出</th><th>黑屏起始</th></tr>
+    <tr><td>S1</td><td>14s</td><td>10s</td><td>4s</td><td>10s</td></tr>
+    <tr><td>S6–S8</td><td>12s</td><td>10s</td><td>2s each</td><td>60/72/84s</td></tr>
+    <tr><td>S9/S11/S12</td><td>14s</td><td>10s</td><td>4s each</td><td>96/120/134s</td></tr>
+    <tr><td class="bad">S13</td><td class="bad">39s</td><td>10s</td><td class="bad">29s</td><td class="bad">148s</td></tr>
+  </table>
+
+  <h2>Skill 修改方案</h2>
+  <div class="mod"><strong>generation-skill</strong> — B-roll 必须 sound=off；会议类 prompt 禁 discussion/dialogue；probe 失败 block assembly</div>
+  <div class="mod"><strong>video-models-routing</strong> — slot 不得超过 probe 时长；超出必须 loop 或换模型</div>
+  <div class="mod"><strong>assembly-skill</strong> — VO-first 切点；speech audit；probe 后 lint 时长</div>
+  <div class="mod"><strong>hyperframes guide</strong> — 卡片禁止 .clip 全屏样式；字幕/卡片 z-index 互斥</div>
+
+  <h2>重制清单</h2>
+  <ol style="font-size:13px;color:var(--dim);padding-left:20px;line-height:2">
+    <li>probe 全部 13 段，按真实时长重算时间轴</li>
+    <li>按 SRT 句点重排 B-roll（empty shelves → S2，boardroom → S7）</li>
+    <li>S7 重生成 sound=off + 无对话 prompt</li>
+    <li>移除 chapter 卡片 .clip class</li>
+    <li>S13 实现 loop 或缩短 slot 至 ≤10s</li>
+  </ol>
+
+  <h2>文件索引</h2>
+  <ul style="font-size:13px;color:var(--dim);padding-left:20px;line-height:2">
+    <li><a href="95622700923_177s_supply-chain-qa-issues.md">完整根因报告 (Markdown)</a></li>
+    <li>supply_chain_video.html — 合成 HTML</li>
+    <li>sc_vo_part1.srt / sc_vo_part2.srt — 旁白字幕</li>
+    <li>tool-timeline.json — 296 次 tool 调用</li>
+  </ul>
+</div>
+</body>
+</html>

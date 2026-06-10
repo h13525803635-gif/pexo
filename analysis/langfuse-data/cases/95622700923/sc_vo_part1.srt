@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:11,604
+Every year, trillions of dollars in goods travel across oceans, highways, and continents — connecting factories to shelves, and products to people.
+
+2
+00:00:11,684 --> 00:00:14,403
+But what happens when that system breaks down?
+
+3
+00:00:14,403 --> 00:00:18,199
+Supply chain disruptions are not just headlines.
+
+4
+00:00:18,255 --> 00:00:23,995
+They are real events that ripple from a single delay into shortages felt around the world.
+
+5
+00:00:23,995 --> 00:00:34,745
+Transportation delays — whether from port congestion, driver shortages, or severe weather — can hold products in limbo for weeks at a time.
+
+6
+00:00:34,745 --> 00:00:40,552
+When a key supplier goes offline, the entire downstream chain grinds to a halt.
+
+7
+00:00:40,792 --> 00:00:46,155
+A single missing component can stop production at facilities thousands of miles away.
+
+8
+00:00:46,155 --> 00:00:57,182
+Global events — from pandemics to geopolitical conflicts to natural disasters — have shown us just how fragile interconnected supply chains can be.
+
+9
+00:00:57,182 --> 00:00:59,920
+For businesses, the cost is immediate.
+
+10
+00:01:00,040 --> 00:01:10,315
+Inventory shortages mean lost sales, frustrated customers, and mounting pressure on operations teams scrambling to source alternatives.
+
+11
+00:01:10,315 --> 00:01:15,589
+For consumers, it means empty shelves where your essentials should be.
+
+12
+00:01:15,738 --> 00:01:19,750
+Longer lead times on the products you rely on every day.
