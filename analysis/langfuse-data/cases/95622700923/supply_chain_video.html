@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face {
+    font-family: 'Inter';
+    src: url('font://inter?weight=400&style=normal');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('font://inter?weight=700&style=normal');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('font://montserrat?weight=700&style=normal');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('font://montserrat?weight=600&style=normal');
+    font-weight: 600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  #composition {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .clip {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+  }
+
+  video.clip {
+    object-fit: cover;
+  }
+
+  /* Chapter card styles */
+  .chapter-card {
+    position: absolute;
+    left: 80px;
+    bottom: 120px;
+    background: rgba(0,0,0,0.65);
+    border-left: 6px solid #F59E0B;
+    padding: 18px 32px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chapter-card .label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: #F59E0B;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .chapter-card .title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+
+  /* Main title card */
+  .title-card {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .title-card .main-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 88px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.8);
+  }
+
+  .title-card .main-title span {
+    color: #F59E0B;
+  }
+
+  .title-card .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 32px;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+    margin-top: 24px;
+    letter-spacing: 1px;
+  }
+
+  /* Subtitle / VO captions */
+  .vo-subtitle {
+    position: absolute;
+    bottom: 60px;
+    left: 0; right: 0;
+    text-align: center;
+    padding: 0 160px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .vo-subtitle span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    color: #FFFFFF;
+    background: rgba(0,0,0,0.6);
+    padding: 8px 20px;
+    line-height: 1.5;
+    display: inline;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Dark overlay for transitions */
+  .dark-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+</style>
+</head>
+<body>
+<div id="composition"
+     data-composition-id="supply-chain"
+     data-width="1920"
+     data-height="1080">
+
+  <!-- ============ VIDEO CLIPS ============ -->
+
+  <!-- S1: Port Aerial (0-14s) -->
+  <video class="clip" id="vid_s1"
+    data-start="0" data-duration="14" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_tCmnqns%2Fsc_s1_port_aerial_20260609T094947_ad00198e.mp4?Expires=1781603391&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=kTfMly%2BkT0zCHfq3%2BVBomKOD0G8%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S2: Empty Shelves (14-22s) -->
+  <video class="clip" id="vid_s2"
+    data-start="14" data-duration="8" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_wn3PdPB%2Fsc_s2_empty_shelves_20260609T094958_a3b50e6a.mp4?Expires=1781603402&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=1nkI56AF3Rl9wUvEN8S1bLGG62E%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S3: Trucks Highway (22-32s) -->
+  <video class="clip" id="vid_s3"
+    data-start="22" data-duration="10" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_nr9VfhD%2Fsc_s3_trucks_highway_20260609T094954_26b78f7a.mp4?Expires=1781603398&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=4%2FuKiRVNk%2BH4jQE4%2FEFzkSJEHuY%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S4: Factory Closed (32-40s) -->
+  <video class="clip" id="vid_s4"
+    data-start="32" data-duration="8" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_TRLUDje%2Fsc_s4_factory_closed_20260609T094953_903ea16f.mp4?Expires=1781603396&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=u0YB4kUMUONzr0KSdeAVnHP2Xk4%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S5: Storm Ocean (40-50s) -->
+  <video class="clip" id="vid_s5"
+    data-start="40" data-duration="10" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_hg1UNNn%2Fsc_s5_storm_ocean_20260609T094952_f25b6749.mp4?Expires=1781603397&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=%2BtOPzggJsjAppviPTNr1gSMX0bw%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S6: Stressed Business (50-62s) -->
+  <video class="clip" id="vid_s6"
+    data-start="50" data-duration="12" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_pvCNpnu%2Fsc_s6_stressed_business_20260609T095000_6b4b1a70.mp4?Expires=1781603402&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=tf1C3CTY2WQAZZt4tsPcaSFr3ps%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S7: Boardroom Crisis (62-74s) -->
+  <video class="clip" id="vid_s7"
+    data-start="62" data-duration="12" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_TDsZuRH%2Fsc_s7_boardroom_crisis_20260609T094953_e10d9811.mp4?Expires=1781603396&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=P5PUvB6FyKjjeHKdC6n3iVbSUh8%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S8: Supplier Network (74-86s) -->
+  <video class="clip" id="vid_s8"
+    data-start="74" data-duration="12" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_78bGBLa%2Fsc_s8_supplier_network_20260609T095259_d534e675.mp4?Expires=1781603583&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=D6bLDclvU2cX9fh08jdldRewE9Q%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S9: Car Assembly (86-100s) -->
+  <video class="clip" id="vid_s9"
+    data-start="86" data-duration="14" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_fWVD5ne%2Fsc_s9_car_assembly_20260609T095003_d6b3988d.mp4?Expires=1781603406&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=FdV8tY5dsKuNTPz5gqFUm0xAAhY%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S10: Semiconductor (100-110s) -->
+  <video class="clip" id="vid_s10"
+    data-start="100" data-duration="10" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_Tqc1gqn%2Fsc_s10_semiconductor_20260609T094953_c89b92af.mp4?Expires=1781603396&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=ncbdLP47%2FoudgHqluHSmuxwHQoU%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S11: Logistics Dashboard (110-124s) -->
+  <video class="clip" id="vid_s11"
+    data-start="110" data-duration="14" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_ReTpgGs%2Fsc_s11_logistics_dashboard_20260609T094948_481b517d.mp4?Expires=1781603391&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=vq4Fvzre79Ne%2BNQ5LIhPEDd5BsY%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S12: Port Efficient (124-138s) -->
+  <video class="clip" id="vid_s12"
+    data-start="124" data-duration="14" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_JjzKmPy%2Fsc_s12_port_efficient_20260609T095002_ebe627ff.mp4?Expires=1781603406&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=FdV8tY5dsKuNTPz5gqFUm0xAAhY%3D"
+    muted playsinline>
+  </video>
+
+  <!-- S13: Sunrise Global (138-177s, 39s = loop) -->
+  <video class="clip" id="vid_s13"
+    data-start="138" data-duration="39" data-track-index="1"
+    data-media-start="0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_omcUzhc%2Fsc_s13_sunrise_global_20260609T094948_4f98f806.mp4?Expires=1781603391&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=1n2bF87lN9EGHxBFo493uRLLFlQ%3D"
+    muted playsinline>
+  </video>
+
+  <!-- ============ TITLE CARD (0-5s) ============ -->
+  <div class="title-card" id="title_card" data-start="0" data-duration="5" data-track-index="10">
+    <div class="main-title">Supply Chain<br><span>Disruptions</span></div>
+    <div class="subtitle">Causes · Impact · Recovery</div>
+  </div>
+
+  <!-- ============ CHAPTER CARDS ============ -->
+
+  <!-- Chapter 1: What Are Supply Chain Disruptions? (22s) -->
+  <div class="chapter-card" id="ch1_card" data-start="22" data-duration="4" data-track-index="10">
+    <div class="label">Part 1</div>
+    <div class="title">Understanding Disruptions</div>
+  </div>
+
+  <!-- Chapter 2: Impact (50s) -->
+  <div class="chapter-card" id="ch2_card" data-start="50" data-duration="4" data-track-index="10">
+    <div class="label">Part 2</div>
+    <div class="title">Impact on Business &amp; Consumers</div>
+  </div>
+
+  <!-- Chapter 3: Recovery Strategies (74s) -->
+  <div class="chapter-card" id="ch3_card" data-start="74" data-duration="4" data-track-index="10">
+    <div class="label">Part 3</div>
+    <div class="title">Recovery Strategies</div>
+  </div>
+
+  <!-- ============ AUDIO: VO Part 1 (0-79.75s) ============ -->
+  <audio id="vo_part1"
+    data-start="0" data-duration="79.75" data-track-index="20"
+    data-volume="1.0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_GmjbDx2%2Fsc_vo_part1_20260609T095519_e05901eb.mp3?Expires=1781603720&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=NGFQLQ171BV21XyI6WX0JEg9wGk%3D">
+  </audio>
+
+  <!-- ============ AUDIO: VO Part 2 (79.75-176.7s) ============ -->
+  <audio id="vo_part2"
+    data-start="79.75" data-duration="96.955" data-track-index="20"
+    data-volume="1.0"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_PyRq5VQ%2Fsc_vo_part2_20260609T095604_f8595b9f.mp3?Expires=1781603764&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=EU8GbIrIJkKo6vzO6vvqQbh9%2FJ4%3D">
+  </audio>
+
+  <!-- ============ BGM (0-177s) ============ -->
+  <audio id="bgm"
+    data-start="0" data-duration="177" data-track-index="19"
+    data-volume="0.18"
+    src="https://pexo-assets.oss-us-east-1.aliyuncs.com/projects%2F95622700923%2Fassets%2Fa_QrUPnhM%2Fsc_bgm_20260609T095353_b56fd6b0.mp3?Expires=1781603634&OSSAccessKeyId=LTAI5tP8tt8fLQYLXVFAxuww&Signature=3K08As6zqPDVupqjjUNPtV%2Budlo%3D">
+  </audio>
+
+  <!-- ============ SRT SUBTITLE: VO Part 1 ============ -->
+  <div id="sub_vo1"
+    data-start="0" data-duration="79.75" data-track-index="30"
+    data-subtitle="asset://a_GmjbDx2_sub"
+    data-subtitle-mode="burn">
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+(function() {
+  var tl = gsap.timeline({ paused: true });
+  window.__timelines = window.__timelines || {};
+  window.__timelines['supply-chain'] = tl;
+
+  // Helper: fade in a clip at its data-start, fade out at end
+  function addClip(id, start, dur, fadeIn, fadeOut) {
+    fadeIn = fadeIn || 0.6;
+    fadeOut = fadeOut || 0.6;
+    tl.to('#' + id, { opacity: 1, duration: fadeIn, ease: 'power1.inOut' }, start);
+    tl.to('#' + id, { opacity: 0, duration: fadeOut, ease: 'power1.inOut' }, start + dur - fadeOut);
+  }
+
+  // Video clips
+  addClip('vid_s1',  0,   14);
+  addClip('vid_s2',  14,  8);
+  addClip('vid_s3',  22,  10);
+  addClip('vid_s4',  32,  8);
+  addClip('vid_s5',  40,  10);
+  addClip('vid_s6',  50,  12);
+  addClip('vid_s7',  62,  12);
+  addClip('vid_s8',  74,  12);
+  addClip('vid_s9',  86,  14);
+  addClip('vid_s10', 100, 10);
+  addClip('vid_s11', 110, 14);
+  addClip('vid_s12', 124, 14);
+  addClip('vid_s13', 138, 39, 1.0, 2.0);
+
+  // Title card: fade in at 0, hold 3s, fade out
+  tl.to('#title_card', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.3);
+  tl.to('#title_card', { opacity: 0, duration: 0.8, ease: 'power2.in' }, 4.2);
+
+  // Chapter 1 card
+  tl.to('#ch1_card', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 22);
+  tl.to('#ch1_card', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 25.5);
+
+  // Chapter 2 card
+  tl.to('#ch2_card', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 50);
+  tl.to('#ch2_card', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 53.5);
+
+  // Chapter 3 card
+  tl.to('#ch3_card', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 74);
+  tl.to('#ch3_card', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 77.5);
+
+})();
+</script>
+</body>
+</html>
