@@ -48,6 +48,64 @@
 
 因此首版不是“音频被合成丢了”，而是“从编排阶段就没有创建或挂载音轨”。HyperFrames 渲染本身不会凭空生成 BGM/SFX，HTML 没有 `<audio>` 时输出 mp4 就会是无声视频。
 
+## 解决方案
+
+### 1. 立即修复当前项目
+
+对 `24792503650`，建议按以下顺序重新出片：
+
+1. 使用已生成并通过 QA 的 green-plate 素材 `smartphone_cutout_exact_20260611T040312_22745b5f.png`，不要再引用原始 `07_04_smartphone.png`。
+2. 在 HyperFrames HTML 中继续用 canvas key-color 方式去除 `#00FF00` 背景，并以预览帧确认：
+   - 手机边缘无绿色残留；
+   - 手机尺度和倾斜角接近原图；
+   - 四张 feature card 和连接线无遮挡。
+3. 补一条产品展示类 BGM 或轻量 SFX：
+   - 若只需要氛围声：调用 `music_generate` 生成 10 秒左右科技感 BGM；
+   - 若要更强产品质感：叠加轻微 whoosh / pop SFX 对齐 0 秒手机入场、4 秒卡片弹出、连接线 wipe-in。
+4. 对生成的音频调用 `get_file_info`，把 signed URL 作为 `<audio src="https://...">` 写入 HTML。
+5. 重新 `submit_render` 后使用 `probe_media` 校验最终 mp4：
+   - 必须有 video stream；
+   - 必须有 audio stream；
+   - 总时长约 10 秒；
+   - 音频不应提前截断或为空轨。
+6. 校验通过后再 `show_final_video` 交付。
+
+### 2. HTML 侧推荐实现
+
+HyperFrames composition 中应显式挂载音频，例如：
+
+```html
+<audio
+  src="https://.../smartphone_showcase_bgm.mp3"
+  data-start="0"
+  data-duration="10"
+  data-volume="0.28"
+></audio>
+```
+
+如果使用 SFX，可拆成多条短音频：
+
+```html
+<audio src="https://.../phone_whoosh.mp3" data-start="0.2" data-duration="1.0" data-volume="0.45"></audio>
+<audio src="https://.../cards_pop.mp3" data-start="4.0" data-duration="0.8" data-volume="0.5"></audio>
+<audio src="https://.../line_sweep.mp3" data-start="4.1" data-duration="0.7" data-volume="0.35"></audio>
+```
+
+### 3. 产品化修复
+
+建议在 HyperFrames 提交前增加两个硬校验：
+
+1. **Cutout gate**：当 composition 里使用用户上传的产品/Logo/主体图片作为独立浮层时，必须满足以下任一条件：
+   - 图片有真实 alpha 且已被检测验证；
+   - 存在 `cutout_asset_manifest`；
+   - 已生成纯色 plate，并且 HTML 使用 canvas key-color 去底。
+
+2. **Audio gate**：当用户没有明确说“静音/不要声音”时，必须满足：
+   - 计划中有 `audio_intent`；
+   - 已生成或选定 BGM/SFX/VO；
+   - HTML 中至少有一个 `<audio src="https://...">`；
+   - 最终 mp4 经 `probe_media` 验证包含 audio stream。
+
 ## 应修复的流程门禁
 
 1. 产品/主体浮层类 HTML composition：若用户上传图不是已验证透明或 cutout manifest，必须先走 cutout normalization，禁止直接 `<img>` 原图。
