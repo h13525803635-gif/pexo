@@ -75,6 +75,70 @@ analyze_file_content(uploaded After image)
 
 这类产物从技术上是视频文件，但从用户语义上不是“图生视频”或“人物动起来的视频”。根因是路由把 `video` 理解成“把 HTML 动效渲染成 MP4”，而不是“先生成动态 footage，再做 overlay”。
 
+## 问题根因
+
+### 根因 1：首轮路由把“生成视频”误判成“HTML 动效渲染成 MP4”
+
+用户明确说 `creating a 1:1 split-screen video`，并且要求 Before/After 服装对比。正确语义应该是：
+
+```text
+参考图/生成图 -> video_generate 生成动态人物 footage -> HyperFrames 叠加 divider/card 动效 -> render MP4
+```
+
+但首轮实际走成了：
+
+```text
+参考图/生成图 -> <img> 静态面板 -> HyperFrames 叠加 divider/card 动效 -> render MP4
+```
+
+也就是说系统只满足了“MP4 文件”和“overlay 动效”，没有满足“主视觉是动态视频”。
+
+### 根因 2：工具选择缺少 `video_generate`
+
+首轮只调用了 `image_generate` 来生成 Before 图片，然后把 Before 图片和 After 上传图写入 HTML。没有把两张图作为 `image2video` 或 `reference2video` 的输入。
+
+因此首轮最终文件虽然是 `.mp4`，但主画面本质仍是两张静图。这个问题属于“视频容器成功，视频语义失败”。
+
+### 根因 3：交付前缺少静态主视觉拦截
+
+在 `submit_render` / `show_final_video` 前，系统没有检查：
+
+```text
+用户是否要求 video
+主视觉是否只有 <img>
+是否存在成功的 video_generate
+```
+
+如果这个校验存在，首轮应该被拦截，并要求先补 `video_generate`，而不是直接交付 `outfit_splitscreen_final.mp4`。
+
+### 根因 4：第二轮视频生成没有锁定左右构图
+
+第二轮虽然补了 `video_generate`，但 Before 和 After 是两个独立任务。两个 prompt 没有强制约束：
+
+- same camera distance
+- same body scale
+- same subject bbox height
+- same head/feet safe margins
+- no zoom-in / no crop drift
+
+视频模型因此各自决定人物大小和镜头距离，导致两个 `960x960` 视频内部的主体比例不同。
+
+### 根因 5：最终合成依赖 `object-fit: cover` 放大了差异
+
+v2 合成把两个 `960x960` 正方形视频放进 `540x1080` 的竖长半屏，并使用 `object-fit: cover`。这个 CSS 会用裁切来填满容器。
+
+当两个输入视频本身的人物位置和大小不一致时，同样的 `cover` 策略不会把人物比例统一，反而会把 framing 差异更明显地暴露出来。
+
+### 根因 6：缺少 split-screen 前的归一化步骤
+
+Before/After 对比类视频需要在合成前做统一规格处理：
+
+```text
+detect subject bbox -> normalize scale/crop/pad -> exact half-screen video -> final split-screen
+```
+
+本案直接把两个独立生成的视频塞进左右面板，没有做人物 bbox 对齐、统一缩放和安全区裁切，所以最终左右视觉比例不一致。
+
 ## 第二轮真实链路
 
 trace-3 的 session summary 记录：用户第二轮要求把静态图片面板换成 live animated video panels。
