@@ -20,4 +20,5 @@ Internal Pexo tooling / reports；Pexo 相关案例分析材料与 Langfuse 拉�
 | `analysis/case-16670575106-static-image-route-no-video-no-audio.md` | 16670575106 | 历史课堂：底图未图生视频且成片无音频的根因与修复方案 |
 | `case-50814051508-narration-script-mismatch-causes-and-fixes.md` | 50814051508 | 旁白与脚本不匹配的原因与修复 |
 | `case-38758766231-multi-segment-first-frame-consistency.md` | 38758766231 | 美甲 UGC 广告：多段视频首帧一致性问题根因与修复方案 |
+| `analysis/case-95368034930-hyperframes-subtitle-overlap-no-audio.md` | 95368034930 | 板块运动科普：HyperFrames 字幕叠加乱码与无旁白音频根因 |
 | `analysis/audio-overlap-cases-summary.md` | 多案例 | 音频叠加专题汇总与整改 playbook |
