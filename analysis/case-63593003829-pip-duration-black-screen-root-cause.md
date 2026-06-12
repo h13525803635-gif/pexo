@@ -1,30 +1,32 @@
-# Case 63593003829: PiP Duration Miscalculation and Black Screen
+# Case 63593003829：画中画时长误判与尾部黑屏问题
 
-## Summary
+## 结论摘要
 
-Project `63593003829` requested a sneaker product showcase video:
+项目 `63593003829` 的原始需求是制作一条运动鞋产品展示视频：
 
-- Main visual: close-up rotating shot of the sneaker.
-- PiP visual: bottom-right window showing the shoe being worn while running.
-- Overlay: product spec card sliding in from the left with `280g`, `Cushion Tech`, and `Breathable Mesh`.
+- 主画面：鞋子的 close-up rotating shot。
+- 画中画：右下角展示穿着这双鞋跑步的画面。
+- 叠加信息：从左侧滑入产品参数卡，包含 `280g`、`Cushion Tech`、`Breathable Mesh`。
 
-The user reported two symptoms:
+用户反馈了两个问题：
 
-1. The first delivery only appeared to provide one image.
-2. After the user asked again, the delivered video had a long black section at the end.
+1. 首次成片看起来只给了一张图。
+2. 用户追问后拿到的视频，后面有很长一段黑屏。
 
-The root cause is a timeline planning error plus insufficient delivery QA:
+根因是：**成片时长规划错误 + 交付前视觉 QA 不足**。
 
-> The two generated 8-second clips were treated as if they could contribute roughly `8s + 8s` of sequential duration, but the requested design was picture-in-picture. The two clips should have played in parallel on the same timeline. The final HyperFrames render was made as an 18-second video, while the visible source videos only covered about 8 seconds unless explicitly looped, frozen, or replaced by a fallback end frame. Once the embedded videos ended, the composition exposed black background.
+核心问题可以概括为：
 
-## Langfuse Evidence
+> 系统生成了两段 8 秒视频，但误把它们当成可以顺序相加的时长素材，即近似 `8s + 8s`。实际需求是画中画，主画面和 PiP 画面应该并行播放，共享同一段时间轴。最终 HyperFrames 被渲染成 18 秒，但可见视频素材本身只覆盖约 8 秒；如果 HTML 没有显式设置循环、冻结尾帧或兜底产品图，素材播完后就会露出黑底，形成尾部长黑屏。
 
-Local export path:
+## Langfuse 证据
+
+本地导出路径：
 
 - `analysis/langfuse-data/cases/63593003829/trace-2-fb3a282a.json`
 - `analysis/langfuse-data/cases/63593003829/trace-index.json`
 
-Trace index after refetch:
+重新拉取后的 trace 索引：
 
 ```json
 {
@@ -47,33 +49,33 @@ Trace index after refetch:
 }
 ```
 
-The first trace, which likely corresponds to the initial delivery, could not be fetched from Langfuse because the trace detail endpoint returned HTTP 500. The second trace contains the user's follow-up message:
+第一条 trace 很可能对应首次交付，但 Langfuse trace detail 接口连续返回 HTTP 500，无法取回完整详情。第二条 trace 是用户追问后的链路，用户消息是：
 
 ```text
 Please deliver the video.
 ```
 
-The recovered context in that trace contains the original video request:
+第二条 trace 中恢复出的原始视频需求是：
 
 ```text
 Generate a product showcase video using the sneaker image. Start with a close-up rotating shot of the shoe, then add a picture-in-picture window in the bottom-right showing the shoe being worn while running. Overlay a product spec card sliding in from the left with key features: weight 280g, cushion tech, breathable mesh.
 ```
 
-## Timeline
+## 调用时间线
 
-All times are from `2026-06-11` UTC.
+以下时间均为 `2026-06-11` UTC。
 
-| Time | Event | Meaning |
+| 时间 | 事件 | 含义 |
 |---|---|---|
-| `06:14:29` | User says `Please deliver the video.` | User had to ask again after the first delivery. |
-| `06:14:34` | `query_render(job_id="0x7otdim")` | Agent tried to recover an old render job. |
-| `06:14:34` | `hyperframes.job_not_found` | The old render job was gone or invalid. |
-| `06:14:42` | `submit_render(html_file="/projects/63593003829/workspace/sneaker_showcase.html", fps=30, output_name="sneaker_product_showcase")` | Agent resubmitted the HTML composition. |
-| `06:22:52` | render status `done` | New render completed. |
-| `06:23:01` | `probe_media(asset://a_D3UAoia)` | Agent checked container metadata only. |
-| `06:23:15` | `show_final_video("/projects/63593003829/workspace/assets/sneaker_product_showcase.mp4")` | Final video was delivered. |
+| `06:14:29` | 用户发送 `Please deliver the video.` | 用户在首次交付后再次要求交付视频。 |
+| `06:14:34` | `query_render(job_id="0x7otdim")` | Agent 尝试恢复上一轮旧渲染任务。 |
+| `06:14:34` | 返回 `hyperframes.job_not_found` | 旧渲染任务不存在或已失效。 |
+| `06:14:42` | `submit_render(html_file="/projects/63593003829/workspace/sneaker_showcase.html", fps=30, output_name="sneaker_product_showcase")` | Agent 重新提交 HTML 合成渲染。 |
+| `06:22:52` | render status `done` | 新渲染任务完成。 |
+| `06:23:01` | `probe_media(asset://a_D3UAoia)` | Agent 只检查了媒体容器元数据。 |
+| `06:23:15` | `show_final_video("/projects/63593003829/workspace/assets/sneaker_product_showcase.mp4")` | 最终视频被交付。 |
 
-Final video metadata from `probe_media`:
+最终视频的 `probe_media` 元数据：
 
 ```text
 file: asset://a_D3UAoia
@@ -83,170 +85,167 @@ fps: 30
 codec: H.264 + AAC stereo
 ```
 
-Generated media in local cache:
+本地缓存中的生成素材：
 
 - `sneaker_rotating_closeup_20260611T023503_c04bb093.mp4`
 - `sneaker_running_pip_20260611T023442_564acae9.mp4`
 - `sneaker_bgm_20260611T023523_75c34f08.mp3`
 - `sneaker_product_showcase.mp4`
 
-## Why the First Delivery Looked Like One Image
+## 为什么首次成片像是只给了一张图
 
-The visible second trace shows the agent attempted to query a previous render job:
+第二条可见 trace 显示，Agent 一开始尝试查询上一轮旧渲染任务：
 
 ```text
 query_render(job_id="0x7otdim") -> hyperframes.job_not_found
 ```
 
-That means the first attempt did not leave a valid, recoverable render job for the follow-up turn. Because the failed first trace cannot be fetched due to Langfuse HTTP 500, the exact final action from the first turn is not visible. However, the available evidence supports this explanation:
+这说明首次尝试没有留下一个可恢复、可交付的有效视频渲染任务。因为第一条 trace 因 Langfuse HTTP 500 无法取回，无法 100% 还原首次最终动作；但现有证据能支持以下判断：
 
-- The user had to ask again with `Please deliver the video`.
-- The next turn tried to recover an old render job.
-- That job was missing.
-- The agent then resubmitted the render from HTML.
+- 用户后续明确追问 `Please deliver the video`。
+- 追问后的链路试图恢复旧渲染任务。
+- 旧任务返回 `job_not_found`。
+- Agent 随后从 HTML 重新提交渲染。
 
-So the first issue was a delivery-state failure: the system did not reliably deliver the completed video asset on the first turn and fell back into a state where only a preview/image-like artifact may have been visible to the user.
+因此，首次问题本质是**交付状态失败**：系统没有在第一轮稳定交付完成的视频 asset，用户侧可能只看到了预览图、封面图或类似图片的结果。
 
-## Why the Second Video Had a Long Black Screen
+## 为什么第二次视频后面有长黑屏
 
-The production logic generated two 8-second clips:
+生产链路生成了两段 8 秒视频：
 
-1. Main clip: rotating sneaker close-up.
-2. PiP clip: running/worn shoe footage.
+1. 主画面：鞋子旋转 close-up。
+2. PiP 画面：穿着鞋跑步的动态镜头。
 
-But those clips were not supposed to be sequential scenes. The user specifically asked for a picture-in-picture window, so the correct structure was:
+但这两段不是顺序场景。用户明确要求的是画中画，因此正确结构应该是：
 
 ```text
 0s ---------------- 8s
-main rotating shoe:  [================]
-PiP running shoe:       [=============]
-spec card overlay:         [==========]
+主画面旋转鞋子:  [================]
+PiP 跑步画面:        [=============]
+参数卡叠加:             [==========]
 ```
 
-The mistaken structure treated the clips more like duration inventory:
+错误结构则把它们当成了时长库存：
 
 ```text
-main clip 8s + PiP clip 8s + intro/outro packaging ~= 18s
+主画面 8s + PiP 8s + 片头/片尾包装 ~= 18s
 ```
 
-That is wrong for a PiP composition because the main and PiP videos overlap in time. The final render was 18 seconds, but the visual source clips only covered roughly the first 8 seconds unless the HTML explicitly extended them.
+这对画中画合成是不成立的，因为主视频和 PiP 视频是在同一时间段里叠加播放，而不是先后播放。最终渲染时长是 18 秒，但视觉素材本身只覆盖约前 8 秒；如果 HTML 没有显式延展素材，后半段就会露出黑底。
 
-Expected safeguards were missing:
+当时缺少这些兜底：
 
-- No `loop` for the embedded video elements.
-- No freeze-frame or poster frame after source video end.
-- No fallback product image/background for the tail.
-- No visual black-frame QA before delivery.
+- 没有给嵌入视频设置 `loop`。
+- 没有在源视频结束后冻结最后一帧。
+- 没有在尾部切换到产品静帧或品牌 end card。
+- 没有在交付前做黑帧/暗帧视觉 QA。
 
-The agent did run `probe_media`, but this only confirmed the file was technically valid:
+Agent 虽然运行了 `probe_media`，但它只能证明文件技术上有效：
 
 ```text
 18s, 1920x1080, 30fps, H.264 video + AAC audio
 ```
 
-It did not verify whether the frames were visually non-black.
+它不能证明画面内容在 18 秒内都正常可见。
 
-## Correct Design Interpretation
+## 正确的需求理解
 
-The correct interpretation of the request:
+这个需求应该被理解为多图层并行合成：
 
-- The rotating close-up is the main background layer.
-- The running/worn shoe footage is an overlaid PiP layer.
-- The spec card is another overlay layer.
-- These layers should coexist on one timeline.
+- 旋转鞋子 close-up 是主背景层。
+- 跑步镜头是右下角 PiP 叠加层。
+- 产品参数卡是另一个动画叠加层。
+- 三者应该共处同一个时间轴。
 
-The two 8-second clips should not be summed to determine final duration.
+因此，两段 8 秒视频不能相加来决定总时长。
 
-If the final video must be 18 seconds, then at least one of the following is required:
+如果最终视频一定要 18 秒，则至少需要以下一种处理：
 
-- Generate a true 18-second main visual.
-- Loop the 8-second main/PiP clips cleanly.
-- Freeze the last good frame after 8 seconds.
-- Transition to a static product end card.
-- Shorten the final render to the actual visible duration.
+- 生成真正 18 秒的主画面素材。
+- 对 8 秒主画面和 PiP 素材做自然循环。
+- 在 8 秒后冻结最后一帧。
+- 切到静态产品 end card。
+- 或者把最终成片裁到真实有效画面时长。
 
-## Fixes
+## 解决方案
 
-### 1. Timeline Planning Rule
+### 1. 时间线规划规则
 
-Add a planning rule for PiP and split-screen compositions:
-
-```text
-When clips are layered simultaneously, final duration is the max of layer durations, not the sum.
-```
-
-For this case:
+为 PiP、split-screen、多图层并行合成增加规划规则：
 
 ```text
-max(main 8s, PiP 8s) = 8s usable visual duration
+当多个 clip 是并行叠加关系时，最终时长取各图层时长的最大值，而不是求和。
 ```
 
-The final 18-second target was only valid if additional visual coverage was intentionally created.
+本 case 中：
 
-### 2. HyperFrames Authoring Rule
+```text
+max(主画面 8s, PiP 8s) = 8s 可用视觉时长
+```
 
-For every embedded `<video>` in HyperFrames:
+18 秒目标只有在额外生成、循环、冻结或补 end card 的情况下才成立。
 
-- Define what happens after `video.duration`.
-- Use one of:
-  - `loop`
-  - freeze last frame
-  - replace with poster/end card
-  - fade to branded still frame
-  - trim composition duration
+### 2. HyperFrames 写作规则
 
-Never allow the root background to become the only visible layer unless that background is intentionally designed.
+每个 HTML 内嵌 `<video>` 都必须明确源视频结束后的行为：
 
-### 3. Render Recovery Rule
+- `loop`
+- 冻结最后一帧
+- 替换为 poster / end card
+- fade 到品牌静帧
+- 或裁短合成时长
 
-If `query_render` returns:
+除非黑底是明确设计的一部分，否则不能允许 root background 成为尾部唯一可见层。
+
+### 3. 渲染任务恢复规则
+
+如果 `query_render` 返回：
 
 ```text
 hyperframes.job_not_found
 ```
 
-Then:
+则必须：
 
-- Do not continue as if the prior render exists.
-- Resubmit the render.
-- Store the new job id.
-- Deliver only the new completed asset.
-- Avoid exposing stale preview assets as final output.
+- 不再沿用旧任务状态。
+- 重新提交渲染。
+- 保存新的 job id。
+- 只交付新的已完成 asset。
+- 不把旧预览图或旧中间 asset 当作最终结果暴露给用户。
 
-### 4. Visual QA Before Delivery
+### 4. 交付前视觉 QA
 
-`ffprobe` or `probe_media` is not enough. Before `show_final_video`, run frame-level QA:
+`ffprobe` 或 `probe_media` 不足以作为最终 QA。`show_final_video` 前应增加逐帧视觉检查：
 
-- Sample frames at `0s`, `25%`, `50%`, `75%`, and `duration - 1s`.
-- Compute average luminance and non-black pixel ratio.
-- Fail the render if multiple late frames are near black.
-- Re-render or trim before delivery.
+- 抽取 `0s`、`25%`、`50%`、`75%`、`duration - 1s` 等关键帧。
+- 计算平均亮度和非黑像素比例。
+- 如果尾部连续帧接近纯黑，判定渲染失败。
+- 自动重渲染或裁掉黑屏后再交付。
 
-Suggested rule:
+建议规则：
 
 ```text
-If the final 20% of a video has consecutive frames with very low luminance and no intentional fade-to-black marker, block delivery.
+如果最终视频最后 20% 的连续帧亮度极低，且没有显式 fade-to-black 设计标记，则阻止交付。
 ```
 
-### 5. Case-Specific Remediation
+### 5. 本项目补救方案
 
-For project `63593003829`, the clean fix is:
+针对项目 `63593003829`，建议修复步骤：
 
-1. Reopen the HTML composition.
-2. Treat `sneaker_rotating_closeup` as the main layer.
-3. Treat `sneaker_running_pip` as a concurrent PiP layer.
-4. Either shorten the render to about 8-10 seconds or loop/freeze the visuals through 18 seconds.
-5. Add a final product end card if 18 seconds is required.
-6. Re-render.
-7. Run visual black-frame QA.
-8. Deliver the new mp4.
+1. 重新打开 `sneaker_showcase.html`。
+2. 把 `sneaker_rotating_closeup` 作为主画面层。
+3. 把 `sneaker_running_pip` 作为并行 PiP 层。
+4. 如果保留 18 秒，就对素材做 loop / freeze / end card；否则将成片缩短到约 8-10 秒。
+5. 重新渲染。
+6. 执行黑帧视觉 QA。
+7. 确认无黑屏后再交付新的 mp4。
 
-## Final Diagnosis
+## 最终诊断
 
-This was not a user asset problem.
+这不是用户素材问题。
 
-It was caused by:
+问题由三点共同导致：
 
-1. A lost or expired first render job, which made the first delivery appear incomplete.
-2. A PiP duration-planning mistake, where two parallel 8-second videos were treated like sequential duration coverage.
-3. Missing post-render visual QA, so a technically valid 18-second mp4 with a black tail passed delivery.
+1. 首次渲染任务丢失或过期，导致第一次交付看起来不完整。
+2. 对画中画关系的时长规划错误，把两段并行 8 秒视频当成了可顺序相加的 16 秒素材。
+3. 交付前只检查了视频编码和时长，没有检查画面是否存在尾部黑屏。
