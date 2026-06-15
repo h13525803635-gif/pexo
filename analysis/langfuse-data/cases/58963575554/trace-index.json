@@ -1,0 +1,11 @@
+{
+  "fetched": [
+    {
+      "idx": 1,
+      "trace_id": "2995b362614ecc59a15f47d02744cb0f",
+      "start_time": "2026-06-11T02:37:35.575Z",
+      "file": "analysis/langfuse-data/cases/58963575554/trace-1-2995b362.json"
+    }
+  ],
+  "failed": []
+}
