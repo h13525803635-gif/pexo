@@ -1,121 +1,115 @@
-# Pexo Project 53505424835: Image Request Delivered as a 1-Second Static Video
+# Pexo 项目 53505424835：图片请求被交付为 1 秒静止视频
 
-## 中文执行摘要
+## 分析范围与数据完整性
 
-**结论已确认：这是交付类型路由错误，不是图片生成失败。** 用户明确要求一张 16:9 教育图片；Agent 错误进入以 MP4 为最终产物的 `motion-skill` 流程，并把 composition 显式设为 1 秒。过程中，系统已经成功生成且质检通过正确的 PNG，但没有交付该图片，反而删除全部动画后继续调用 `submit_render` 和 `show_final_video`，因此最终得到一段 1 秒静止视频。
+- 项目 ID：`53505424835`
+- Langfuse Trace ID：`a86c59eee99793c138985816a2407171`
+- Trace 开始时间：`2026-07-28T09:01:24.541Z`
+- 发现 Trace 数：1
+- 成功拉取 Trace 数：1
+- 拉取失败数：0
+- 已检查 Observation 数：180
+- 产物检查：根因判断不需要额外检查媒体文件；工具结果和 composition 元数据已直接证明最终产物类型及其时长
 
-建议在三个层面修复：在意图识别阶段锁定 `deliverable_type=image`；为 HTML 制图增加以 `render_frame` 和 PNG 交付为终点的静态分支；在最终交付前强制校验用户请求类型与文件 MIME/扩展名，图片请求遇到 MP4 时直接阻断。
+原始 Langfuse 导出包含临时签名资源 URL 及可能敏感的执行上下文，因此未提交至 GitHub。
 
-## Scope and data completeness
+## 用户可见问题
 
-- Project ID: `53505424835`
-- Langfuse trace: `a86c59eee99793c138985816a2407171`
-- Trace start: `2026-07-28T09:01:24.541Z`
-- Discovered traces: 1
-- Successfully fetched traces: 1
-- Failed fetches: 0
-- Observations inspected: 180
-- Artifact inspection: not required for the root-cause conclusion; tool results and authored composition metadata directly establish the output type and duration
+用户明确要求制作一张简单的 16:9 Transformer Attention 教育**图片**，最终收到的却是 `Transformer_Attention_Explainer.mp4`：一段只有静止画面的 1 秒视频。
 
-The raw Langfuse export is intentionally excluded from Git because it contains temporary signed asset URLs and potentially sensitive execution context.
+## 一句话根因
 
-## User-visible symptom
+**已确认：** Agent 为纯图片请求选择了 HTML-to-video 工作流。虽然期间已成功生成并质检通过用户需要的 PNG，但 Agent 没有交付该图片，而是继续执行视频专用的 `submit_render -> show_final_video` 路径；同时 composition 被显式设置为 1 秒，所有动画又在渲染前被移除，因此最终必然得到 1 秒静止 MP4。
 
-The user explicitly requested a simple 16:9 educational **image** explaining Transformer attention. The delivered artifact was instead `Transformer_Attention_Explainer.mp4`: a one-second video containing a static frame.
-
-## Root cause
-
-**Confirmed:** the agent selected an HTML-to-video workflow for an image-only request, successfully created and validated the requested PNG, but then ignored that valid image artifact and continued through the video-only `submit_render -> show_final_video` delivery path. The authored composition explicitly set its duration to one second, and the agent removed all animation before rendering, so the resulting MP4 was necessarily a one-second static video.
-
-## Causal chain
+## 因果链
 
 ```text
-explicit image request
-  -> motion-skill selected without locking the requested deliverable type
-  -> HTML composition authored with data-duration="1"
-  -> preview at t=0 exposed animation-start invisibility
-  -> all entrance animation removed to make the image visible at t=0
-  -> correct PNG rendered and quality-checked successfully
-  -> PNG not delivered
-  -> submit_render produced MP4
-  -> show_final_video delivered the one-second static video
+用户明确请求图片
+  -> 未锁定交付类型，错误选择 motion-skill
+  -> HTML composition 被显式设置为 data-duration="1"
+  -> t=0 预览暴露动画初始状态不可见问题
+  -> 为保证图片在 t=0 可见，移除全部入场动画
+  -> 正确 PNG 已生成并通过质量检查
+  -> PNG 未被交付
+  -> submit_render 生成 MP4
+  -> show_final_video 交付 1 秒静止视频
 ```
 
-## Chronological evidence
+## 时间线证据
 
-| Time (UTC) | Observation | Evidence | Meaning |
+| 时间（UTC） | Observation | 证据 | 含义 |
 |---|---|---|---|
-| 09:01:24 | Trace input | User asked for a "16:9 educational image" | Requested deliverable type was unambiguously an image. |
-| 09:01:29 | `read_file`, obs `a1df2155161744d2` | Agent loaded `motion-skill`, described as an HTML-to-video composition skill whose workflow ends in MP4 delivery | Earliest faulty routing decision. |
-| 09:04:44 | `write_file`, obs `e4e656c77aeb0b56` | Root and scene both used `data-duration="1"` | The one-second duration was explicitly authored, not an accidental truncation by the renderer. |
-| 09:04:51 | `render_frame`, obs `8867d973e3b2f2fa` | Generated `attn_preview_frame.png` at `time: 0` | The workflow already had a native PNG output mechanism. |
-| 09:04:59 | `analyze_file_content`, obs `bda2a58e67df768f` | QC reported most intended content missing at the animation start state | This exposed a frame-timing problem, not a failure to generate an image. |
-| 09:05:23 | `edit_file`, obs `6776938b39c21d29` | Agent replaced entrance animations with a static timeline and stated "static frame - no entrance animation" | This guaranteed that the subsequent video would contain no motion. |
-| 09:05:26 | `render_frame`, obs `1321124afb3e38be` | Successfully generated `attn_frame_v2.png` | A valid candidate image artifact existed before video rendering. |
-| 09:05:33 | `analyze_file_content`, obs `b8ecec6a1f06498c` | QC confirmed the title, steps, heatmap, observations, formula, colors, and legibility | The requested image was complete and ready to deliver. |
-| 09:05:54 | `submit_render`, obs `43484a4f899f4864` | Submitted the HTML composition as `Transformer Attention Explainer` at 30 fps | The workflow unnecessarily converted the accepted image into video. |
-| 09:06:16 | `show_final_video`, obs `b7e0d0a85f47e790` | Delivered `Transformer_Attention_Explainer.mp4` | Final delivery contradicted the user's requested artifact type. |
+| 09:01:24 | Trace 输入 | 用户要求制作一张“16:9 educational image” | 用户要求的交付类型明确是图片。 |
+| 09:01:29 | `read_file`，obs `a1df2155161744d2` | Agent 加载 `motion-skill`；该技能定义为 HTML-to-video composition，标准流程以 MP4 交付结束 | 这是最早使故障成为必然的错误路由决策。 |
+| 09:04:44 | `write_file`，obs `e4e656c77aeb0b56` | composition 根节点和场景节点都设置了 `data-duration="1"` | 1 秒时长由 Agent 显式写入，并非渲染器意外截断。 |
+| 09:04:51 | `render_frame`，obs `8867d973e3b2f2fa` | 在 `time: 0` 生成 `attn_preview_frame.png` | 当前工作流已经具备直接生成 PNG 的能力。 |
+| 09:04:59 | `analyze_file_content`，obs `bda2a58e67df768f` | 质量检查发现大部分预期内容在动画初始状态不可见 | 暴露的是取帧时机问题，而不是图片生成失败。 |
+| 09:05:23 | `edit_file`，obs `6776938b39c21d29` | Agent 用静态 timeline 替换入场动画，并明确写下 `static frame - no entrance animation` | 此操作保证后续视频不包含任何运动。 |
+| 09:05:26 | `render_frame`，obs `1321124afb3e38be` | 成功生成 `attn_frame_v2.png` | 视频渲染前已经存在可交付的正确图片。 |
+| 09:05:33 | `analyze_file_content`，obs `b8ecec6a1f06498c` | 质量检查确认标题、步骤、热力图、说明、公式、色彩和可读性全部符合预期 | 用户要求的图片已经完成并可直接交付。 |
+| 09:05:54 | `submit_render`，obs `43484a4f899f4864` | 以 30 fps 提交 HTML composition，名称为 `Transformer Attention Explainer` | 工作流不必要地把已验收图片转换成视频。 |
+| 09:06:16 | `show_final_video`，obs `b7e0d0a85f47e790` | 交付 `Transformer_Attention_Explainer.mp4` | 最终产物类型与用户请求直接冲突。 |
 
-## Trigger, propagation, and detection gap
+## 触发原因、传播路径与检测缺口
 
-### Trigger
+### 触发原因
 
-The agent interpreted "educational image" as permission to use the motion composition skill without first persisting `deliverable_type=image`.
+Agent 把“educational image”理解为可以使用 motion composition 制作，但没有先持久化 `deliverable_type=image`。使用 HTML 制图本身没有问题，问题在于制作方式被错误地等同于最终交付类型。
 
-### Propagation
+### 传播路径
 
-The selected skill's normal completion path expects `submit_render` followed by `show_final_video`. Once this path was selected, the agent treated the successfully rendered PNG as only a preview/QC frame rather than the final deliverable.
+所选技能的标准完成路径要求依次调用 `submit_render` 和 `show_final_video`。进入该路径后，Agent 将成功生成的 PNG 仅视为预览和质量检查帧，而没有把它视为最终交付物。
 
-### Detection gap
+### 检测缺口
 
-There was no final contract check comparing the requested MIME/type with the artifact being delivered. Neither lint nor visual QC checks output-type correctness. The task list also used ambiguous wording such as "render the final image" while the actual final tool remained video-only.
+最终交付前不存在“用户请求类型与产物类型一致性”校验。Lint 和视觉质量检查只验证 composition 与画面内容，不验证输出格式。任务列表虽然写着“render the final image”，实际最终工具仍然是仅用于视频的 `show_final_video`，这种状态矛盾没有触发阻断。
 
-## Ruled-out alternatives
+## 已排除的其他解释
 
-- **Image generation failure:** ruled out. `attn_frame_v2.png` was generated successfully and passed detailed visual QC.
-- **Renderer unexpectedly truncated a longer video:** ruled out. Both the composition root and its scene explicitly declared a one-second duration.
-- **Animation failed during export:** ruled out as the primary cause. The agent intentionally removed entrance animation and converted the composition to a static frame before export.
-- **Wrong artifact caused by a stale revision:** not supported. The final MP4 was produced directly from the corrected static HTML after PNG validation.
+- **图片生成失败：已排除。** `attn_frame_v2.png` 已成功生成，并通过详细视觉质量检查。
+- **渲染器意外把长视频截成 1 秒：已排除。** composition 根节点和场景节点都显式声明了 1 秒时长。
+- **导出时动画失效：已排除为主要原因。** Agent 在导出前主动删除入场动画，把 composition 改成了静止画面。
+- **旧版本或错误 revision 被交付：无证据支持。** 最终 MP4 直接由 PNG 验收后的最新静态 HTML 生成。
 
-## Corrective actions
+## 解决方案
 
-### 1. Lock deliverable type during intake
+### 1. 在意图识别阶段锁定交付类型
 
-- **Owner:** intent router / task planner
-- **Trigger:** explicit terms such as `image`, `picture`, `poster`, `infographic`, `still`, `PNG`, `JPG`, or `WebP`, without a request for animation or video
-- **Behavior:** persist `deliverable_type=image` and route to an image-capable workflow
-- **Guardrail:** downstream skills may change the authoring method, but not the deliverable type without explicit user approval
+- **负责人：** 意图路由器 / 任务规划器
+- **触发条件：** 用户明确使用 `image`、`picture`、`poster`、`infographic`、`still`、`PNG`、`JPG`、`WebP` 等词，且没有提出动画或视频要求
+- **正确行为：** 持久化 `deliverable_type=image`，路由到支持图片交付的工作流
+- **防护规则：** 下游技能可以改变制作方式，但未经用户明确同意不得改变交付类型
 
-### 2. Add a static-output branch to HTML composition
+### 2. 为 HTML composition 增加静态图片分支
 
-- **Owner:** `motion-skill` or its successor HTML composition skill
-- **Trigger:** `deliverable_type=image`
-- **Behavior:** author and lint the HTML, call `render_frame` at the intended final state, perform image QC, then deliver the resulting PNG
-- **Guardrail:** block `submit_render`, `query_render`, and `show_final_video` for image-only tasks
+- **负责人：** `motion-skill` 或后续承接 HTML composition 的技能
+- **触发条件：** `deliverable_type=image`
+- **正确行为：** 编写并 lint HTML，在预期最终状态调用 `render_frame`，完成图片质量检查后直接交付 PNG
+- **防护规则：** 图片任务禁止调用 `submit_render`、`query_render` 和 `show_final_video`
 
-### 3. Enforce delivery contract validation
+### 3. 增加最终交付契约校验
 
-- **Owner:** final delivery layer
-- **Trigger:** immediately before any `show_final_*` call
-- **Behavior:** compare requested deliverable type with the artifact extension and MIME type
-- **Guardrail:** reject `.mp4`, `.mov`, or `.webm` when `deliverable_type=image`; reject image files when `deliverable_type=video`
+- **负责人：** 最终交付层
+- **触发条件：** 任意 `show_final_*` 调用之前
+- **正确行为：** 比较用户请求的交付类型与文件扩展名、MIME 类型
+- **防护规则：** 当 `deliverable_type=image` 时拒绝 `.mp4`、`.mov`、`.webm`；当 `deliverable_type=video` 时拒绝图片文件
 
-### 4. Treat successful image QC as a terminal state
+### 4. 将图片质检成功设为终止状态
 
-- **Owner:** agent workflow / task state machine
-- **Trigger:** an image artifact exists and passes all requested visual assertions
-- **Behavior:** mark the image task complete and deliver that exact artifact
-- **Guardrail:** any subsequent format conversion must be justified by the user request or an explicit compatibility requirement
+- **负责人：** Agent 工作流 / 任务状态机
+- **触发条件：** 图片产物已经存在，并通过所有用户要求的视觉断言
+- **正确行为：** 将图片任务标记为完成，并交付通过质检的同一资产
+- **防护规则：** 后续格式转换必须由用户请求或明确的兼容性要求驱动
 
-## Regression checks
+## 回归检查
 
-1. Given "make a 16:9 educational image", the final tool is an image-delivery tool and the delivered MIME type begins with `image/`.
-2. An HTML-authored infographic may call `render_frame`, but must not call `submit_render`.
-3. If `render_frame` returns a PNG that passes QC, that same asset ID is delivered.
-4. A mismatch between `deliverable_type=image` and an MP4 artifact fails before delivery.
-5. Adding words such as "colorful", "steps", or "attention grid" must not cause the router to infer motion.
-6. A request that explicitly asks to animate the infographic routes to video and is unaffected by the image-only guardrail.
+1. 输入“制作一张 16:9 教育图片”时，最终调用图片交付工具，产物 MIME 类型必须以 `image/` 开头。
+2. HTML 制作的信息图可以调用 `render_frame`，但不得调用 `submit_render`。
+3. `render_frame` 返回的 PNG 通过质量检查后，最终必须交付同一个 asset ID。
+4. `deliverable_type=image` 与 MP4 产物不一致时，必须在交付前失败并阻断。
+5. 用户增加“彩色”“步骤”“attention grid”等内容要求时，不得因此推断用户需要动态视频。
+6. 用户明确要求“把信息图做成动画”时，应正常进入视频路径，不受图片专用防护规则影响。
 
-## Conclusion
+## 结论
 
-This was a routing and delivery-contract failure, not a content-generation failure. The earliest effective fix is to lock the requested artifact type at intake; the strongest backstop is a final MIME/type assertion that makes it impossible to deliver a video for an explicit image request.
+这是一次路由和交付契约故障，不是内容生成故障。最早且最有效的修复点是在意图识别阶段锁定用户要求的产物类型；最强的兜底是在最终交付前执行 MIME/类型断言，从机制上禁止为明确的图片请求交付视频。
