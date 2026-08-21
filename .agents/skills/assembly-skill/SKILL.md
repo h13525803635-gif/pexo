@@ -40,7 +40,7 @@ For the video material route, read all active paths to EOF before material decis
 
 Then read:
 
-- `../script-skill/references/music-audio-production-strategy.md` before selecting `bgm`, `song`, or `bgm_sfx`, generating music, fitting a song, or making audio ownership decisions
+- `references/music-audio-production-strategy.md` before selecting `bgm`, `song`, or `bgm_sfx`, generating music, fitting a song, or making audio ownership decisions
 - `references/voice-production-and-resolution.md` before `voice_search`, `voice_preview`, `add_attachments`, choosing the voice selector for `audio_produce`, or producing, replacing, or fitting post VO
 - `references/design-audio-and-assembly.md` before audio truth/ownership or `replace_audio`
 - `references/assembly-handoff-contract.md` before locking the package

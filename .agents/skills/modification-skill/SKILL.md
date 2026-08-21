@@ -20,7 +20,7 @@ Keep reading with `offset` until the tool output reaches the file's EOF; never s
 
 Before the first gated tool call in a session, confirm in your internal plan which gates apply and that each gated file was read to its last line.
 
-When a modification touches music, BGM, SFX, lyrics, timestamps, or audio/video synchronization, also read `../script-skill/references/music-audio-production-strategy.md` completely before classifying the change. Apply its change rules: song changes regenerate the complete song and recompute timing; mix-only changes preserve the song map; coupled visible speech/singing is not an audio-only replacement.
+When a modification touches music, BGM, SFX, lyrics, timestamps, or audio/video synchronization, also read `references/music-audio-production-strategy.md` completely before classifying the change. Apply its change rules: song changes regenerate the complete song and recompute timing; mix-only changes preserve the song map; coupled visible speech/singing is not an audio-only replacement.
 
 **Consult when relevant:** Read `references/image-generation-guide.md` completely to EOF before regenerating packaging key frames or cover images via `image_generate`.
 

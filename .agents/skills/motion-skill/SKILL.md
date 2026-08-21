@@ -10,7 +10,7 @@ metadata:
 
 Motion writes `composition.html` and renders the final mp4. On a Generation-backed route, it runs only for `output_route.mode: motion_composition`. It packages locked footage, authors exact DOM-native material, and animates elements. Honor Script's `visual_stack`; never replace locked primary media.
 
-When a composition contains music, song timestamps, BGM, ambience, or SFX, read `../script-skill/references/music-audio-production-strategy.md` before authoring audio DOM or final mix metadata. Motion consumes the locked audio assets and sentence-level timestamp data; it never regenerates music or changes the song segment map.
+When a composition contains music, song timestamps, BGM, ambience, or SFX, read `references/music-audio-production-strategy.md` before authoring audio DOM or final mix metadata. Motion consumes the locked audio assets and sentence-level timestamp data; it never regenerates music or changes the song segment map.
 
 ## Generation Route Intake Gate
 

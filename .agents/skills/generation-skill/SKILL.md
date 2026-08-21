@@ -47,7 +47,7 @@ Then read triggered references completely:
 6. `references/voice-production-and-resolution.md` before `voice_search`, `voice_preview`, `add_attachments`, or choosing the voice selector for `audio_produce`
 7. `references/generation-voice-strategy-execution.md` before any speech, visible performance, voice reference, audio list, or post-VO production
 8. `references/video-generation-execution.md` for prompt, split, reference, SFX/BGM, or audio sync work
-- `../script-skill/references/music-audio-production-strategy.md` before song generation, timestamp handling, music-first segmentation, or audio-conditioned video generation
+- `references/music-audio-production-strategy.md` before song generation, timestamp handling, music-first segmentation, or audio-conditioned video generation
 9. `references/video-generation-strategy-genes.md` with the video execution contract
 10. `references/image-generation-guide.md` for image/key-frame generation
 11. `references/generation-deterministic-visual-payload-guide.md` for exact readable text or text-bearing assets
