@@ -1,24 +1,19 @@
-# pexo
+# Pexo Case Analysis
 
-Internal Pexo tooling / reports；Pexo 相关案例分析材料与 Langfuse 拉取的 trace 数据（本地工作区备份）。
+Pexo 案例分析、根因报告和内部质量复盘仓库。
+
+## 导航
+
+- [Case 分析项目列表](CASE_ANALYSES.md) - 按项目 ID 排序的完整报告索引
+- [分析材料目录](analysis/) - 报告、证据与本地调查材料
+- [Music And Audio Production Strategy](https://github.com/h13525803635-gif/pexo/tree/codex/music-and-audio-production-strategy/.agents/skills/music-and-audio-production-strategy) - 独立音乐策略分支
 
 ## Reports
 
 - `reports/pexo_satisfaction_report_20260410_0842.html` — 成片后满意度（启发式），中国自然日 2026-04-07～04-09。
 
-## 本地分析材料
+## 目录约定
 
-- `analysis/langfuse-data/cases/` — 按项目 ID 存放的 trace JSON、assets 与部分下载媒体
-- `case-*.md` — 案例说明与结论摘要；命名约定：**`case-<项目ID>-<讨论主题>.md`**（与 Langfuse / Pexo 项目 ID 对齐）
-
-### 已有案例
-
-| 文件 | 项目 ID | 主题 |
-|------|--------|------|
-| `case-97468242117-audio-overlap-and-final-video-analysis.md` | 97468242117 | Cheetah Airlines：co-gen 音频与 TTS 叠加根因及成片结构 |
-| `case-43348924630-multi-character-consistency-analysis.md` | 43348924630 | 冰雪奇缘生日视频：配角/道具一致性差的根因与修复方案 |
-| `analysis/case-16670575106-static-image-route-no-video-no-audio.md` | 16670575106 | 历史课堂：底图未图生视频且成片无音频的根因与修复方案 |
-| `case-50814051508-narration-script-mismatch-causes-and-fixes.md` | 50814051508 | 旁白与脚本不匹配的原因与修复 |
-| `case-38758766231-multi-segment-first-frame-consistency.md` | 38758766231 | 美甲 UGC 广告：多段视频首帧一致性问题根因与修复方案 |
-| `analysis/case-95368034930-hyperframes-subtitle-overlap-no-audio.md` | 95368034930 | 板块运动科普：HyperFrames 字幕叠加乱码与无旁白音频根因 |
-| `analysis/audio-overlap-cases-summary.md` | 多案例 | 音频叠加专题汇总与整改 playbook |
+- Case 报告通过 [CASE_ANALYSES.md](CASE_ANALYSES.md) 统一查找；原路径保留，避免历史链接失效。
+- `analysis/langfuse-data/cases/` 按项目 ID 保存 trace、assets 和调查证据，不作为报告导航入口。
+- 新的产品策略或 Skill 改动使用独立分支，不混入 Case 分析主线。
