@@ -6,7 +6,7 @@ Pexo 案例分析、根因报告和内部质量复盘仓库。
 
 - [Case 分析项目列表](CASE_ANALYSES.md) - 按项目 ID 排序的完整报告索引
 - [分析材料目录](analysis/) - 报告、证据与本地调查材料
-- [Music And Audio Production Strategy](https://github.com/h13525803635-gif/pexo/tree/codex/music-and-audio-production-strategy/.agents/skills/music-and-audio-production-strategy) - 独立音乐策略分支
+- [Music And Audio Production Strategy](https://github.com/h13525803635-gif/pexo/blob/codex/music-and-audio-production-strategy/.agents/skills/script-skill/references/music-audio-production-strategy.md) - 音乐策略分支中的 Script Skill reference
 
 ## Reports
 
