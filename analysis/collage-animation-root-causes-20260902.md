@@ -71,6 +71,119 @@
 3. 验证层检测纯照片平移、parallax、overlay 或 crossfade，并将其判为不满足拼贴风格。
 4. 交付层只有通过风格门禁才能标记 `FINAL`；失败时重生成或明确告知用户发生了降级。
 
+## 对现有拼贴动画 Prompt 模板的修改建议
+
+现有模板已经覆盖纸片材质、持续运动、镜头、转场、字幕、音频和 `DO NOT` 项，因此主要缺口不是继续增加形容词，而是把规则变成不可覆盖、可验证的约束。
+
+### 1. 增加风格优先级和冲突覆盖规则
+
+将以下内容放在模板最前面，防止通用模板或后续 beat 重新解释风格：
+
+```text
+STYLE PRIORITY: If the user requests paper collage, scrapbook, cut-paper,
+paper-craft, mixed-media collage, or stop-motion collage, this style is a
+hard requirement. It overrides generic photorealistic video, isometric,
+parallax, flat-vector, slideshow, and motion-graphics treatments.
+The style must remain consistent across every beat and every revision.
+```
+
+### 2. 明确“拼贴层是主体”，禁止照片加装饰的降级
+
+在 `STYLE` 段落后加入：
+
+```text
+The collage layers are the primary subjects and occupy the visual focus.
+Do not generate a normal photorealistic scene and add small paper decorations
+on top. Every beat must be constructed from independently movable paper,
+photo-cutout, clipping, label, tape, or card layers.
+```
+
+这条直接针对 `43896078339` 和 `19554823058` 的失败模式。
+
+### 3. 把“unseen pair of hands”改成可执行的交互要求
+
+现有措辞容易被模型理解为氛围描述，建议改为：
+
+```text
+Human manipulation is continuous and causally visible. In every beat, show
+hands, fingers, tweezers, pins, tape pulls, or another physical mechanism
+actively rearranging the layers. Do not replace human manipulation with
+autonomous object motion alone.
+```
+
+### 4. 增加后处理保真规则
+
+在 `TRANSITIONS` 或 `DO NOT` 后加入：
+
+```text
+POST-PROCESSING MUST PRESERVE THE COLLAGE MOTION LANGUAGE.
+Deterministic corrections such as checkmarks, labels, or text must be
+rendered as moving paper layers inside the same timeline. Do not replace a
+paper action with a vector overlay, static composite, smooth crossfade,
+slow parallax, or isolated UI correction.
+```
+
+这条针对 `95437570412` 中为修复勾选位置而牺牲拼贴运动的情况。
+
+### 5. 限制分阶段生成的风格漂移
+
+在 `STORY` 前加入：
+
+```text
+Before generating any beat, lock one style manifest for the complete video.
+All later beats, retries, revisions, and assembled segments must inherit the
+same paper materials, layer behavior, motion vocabulary, camera language,
+and transition rules. A continuation must not switch to photo layout,
+parallax, slideshow, or generic explainer motion.
+```
+
+这条针对 `81808640274` 的 first-draft / continuation 风格漂移。
+
+### 6. 明确缺少用户素材时的两种合法路径
+
+在素材相关指令后加入：
+
+```text
+If user-supplied reference material is required but missing, do not silently
+switch to a normal generated scene. Either wait for the material, or obtain
+explicit approval to use fully fictional paper-collage source material.
+When fictional material is approved, it must still be built as movable paper
+layers, not as a complete scene with collage overlays.
+```
+
+### 7. 增加最终风格门禁
+
+现有 `DO NOT` 是生成提示，不足以阻止错误结果交付。建议在模板末尾增加：
+
+```text
+FINAL DELIVERY GATE: Do not mark the video final if any beat has fewer than
+three independently moving paper elements, if landed elements freeze, if the
+main subject is a normal photorealistic scene, if collage pieces are only
+decorative overlays, or if dissolves, smooth crossfades, slow pans, or pure
+parallax are the primary motion language. Regenerate the failed beat or
+report the degradation explicitly.
+```
+
+### 8. 建议同步传给路由和验证器的结构化字段
+
+长 prompt 之外，建议由模板编译成结构化参数，避免关键规则在长文本中被忽略：
+
+```json
+{
+  "style": "paper_collage_stop_motion",
+  "style_hard_requirement": true,
+  "continuous_layer_motion": true,
+  "min_active_paper_elements": 3,
+  "min_visible_changes_per_second": 2,
+  "required_manipulation": true,
+  "allowed_transitions": ["paper_swipe", "tear_away", "hand_clear", "hard_cut"],
+  "forbidden_primary_motion": ["dissolve", "smooth_crossfade", "slow_pan", "pure_parallax"],
+  "final_style_gate": true
+}
+```
+
+这样模板修改才会真正贯穿“意图识别 → 路由 → 生成 → 后期 → 验收 → 交付”，而不是只改变 agent 对用户的描述。
+
 ## 证据说明
 
 本报告基于项目历史、执行消息和资产元数据整理。直接记录包括：`95437570412` 使用 smooth crossfade、`43896078339` 输出 1280x720、`19554823058` 使用小面积分散的 collage accents、`81808640274` 采用分阶段续跑。Metabase MCP 在分析时鉴权失败，因此未将未验证的数据库字段作为证据。
